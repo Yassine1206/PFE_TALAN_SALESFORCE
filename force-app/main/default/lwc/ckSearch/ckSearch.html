@@ -1,0 +1,51 @@
+<template>
+    <div class="search-wrapper">
+        <div class="search-input-wrap">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+                type="text"
+                class="search-input"
+                placeholder="Search products..."
+                value={searchTerm}
+                oninput={handleInput}
+                onfocus={handleFocus}
+                onblur={handleBlur}
+                onkeydown={handleKeyDown}
+            />
+            <template if:true={isSearching}>
+                <div class="search-spinner"></div>
+            </template>
+        </div>
+
+        <div class={dropdownClass}>
+            <template if:true={hasResults}>
+                <div class="search-results">
+                    <template for:each={results} for:item="item">
+                        <div key={item.id} class="search-result-item" data-id={item.id} onclick={handleResultClick}>
+                            <div class="search-result-img">
+                                <img src={item.image} alt={item.name} />
+                            </div>
+                            <div class="search-result-info">
+                                <span class="search-result-name">{item.name}</span>
+                                <span class="search-result-meta">{item.category} · {item.price}</span>
+                            </div>
+                            <span class="search-result-rating">★ {item.rating}</span>
+                        </div>
+                    </template>
+                </div>
+                <div class="search-view-all" onclick={handleViewAll}>
+                    View all results for "{searchTerm}"
+                </div>
+            </template>
+
+            <template if:true={noResults}>
+                <div class="search-no-results">
+                    <p>No products found for "{searchTerm}"</p>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,150 @@
+<template>
+    <div class="cp-wrapper">
+        <!-- Breadcrumb -->
+        <div class="cp-breadcrumb">
+            <a href="/s/" class="cp-bread-link">Home</a>
+            <span class="cp-bread-sep">/</span>
+            <template if:true={category}>
+                <span class="cp-bread-link">{category}</span>
+            </template>
+            <template if:true={subcategory}>
+                <span class="cp-bread-sep">/</span>
+                <span class="cp-bread-current">{subcategory}</span>
+            </template>
+        </div>
+
+        <!-- Header -->
+        <div class="cp-header">
+            <div>
+                <h1 class="cp-title">{pageTitle}</h1>
+                <!-- <p class="cp-count">{resultText}</p> -->
+            </div>
+            <div class="cp-header-right">
+                <button class={filterBtnClass} onclick={handleToggleFilters}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="21" x2="4" y2="14"></line>
+                        <line x1="4" y1="10" x2="4" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12" y2="3"></line>
+                        <line x1="20" y1="21" x2="20" y2="16"></line>
+                        <line x1="20" y1="12" x2="20" y2="3"></line>
+                    </svg>
+                    Filters
+                </button>
+                <select class="cp-sort" onchange={handleSortChange}>
+                    <template for:each={sortOptions} for:item="opt">
+                        <option key={opt.value} value={opt.value} selected={opt.selected}>{opt.label}</option>
+                    </template>
+                </select>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="cp-cats">
+            <template for:each={categoryButtons} for:item="cat">
+                <button key={cat.name} class={cat.className} data-cat={cat.name}
+                    onclick={handleCategoryClick}>{cat.name}</button>
+            </template>
+        </div>
+
+        <!-- Subcategories -->
+        <template if:true={hasSubcategories}>
+            <div class="cp-subs">
+                <template for:each={subButtons} for:item="sub">
+                    <button key={sub.name} class={sub.className} data-sub={sub.name}
+                        onclick={handleSubClick}>{sub.name}</button>
+                </template>
+            </div>
+        </template>
+
+        <!-- Filter Panel -->
+        <template if:true={showFilters}>
+            <div class="cp-filters">
+                <div class="cp-filter-group">
+                    <label class="cp-filter-label">Price range</label>
+                    <div class="cp-price-row">
+                        <input type="number" class="cp-price-input" placeholder="Min $" value={minPrice}
+                            onchange={handleMinPrice} />
+                        <span class="cp-price-dash">—</span>
+                        <input type="number" class="cp-price-input" placeholder="Max $" value={maxPrice}
+                            onchange={handleMaxPrice} />
+                        <button class="cp-price-apply" onclick={handlePriceApply}>OK</button>
+                    </div>
+                </div>
+                <div class="cp-filter-group">
+                    <label class="cp-filter-label">Availability</label>
+                    <select class="cp-filter-select" onchange={handleAvailabilityChange}>
+                        <template for:each={availabilityOptions} for:item="opt">
+                            <option key={opt.value} value={opt.value} selected={opt.selected}>{opt.label}</option>
+                        </template>
+                    </select>
+                </div>
+                <div class="cp-filter-group">
+                    <label class="cp-filter-label">On sale only</label>
+                    <button class={saleButtonClass} onclick={handleSaleToggle}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 12 12 20 4 12"></polyline>
+                            <polyline points="20 4 12 12 4 4"></polyline>
+                        </svg>
+                        Promos
+                    </button>
+                </div>
+                <button class="cp-clear-btn" onclick={handleClearFilters}>Clear all</button>
+            </div>
+        </template>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="cp-loading">
+                <div class="cp-spinner"></div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <!-- Products Grid -->
+            <template if:true={hasProducts}>
+                <div class="cp-grid">
+                    <template for:each={products} for:item="item">
+                        <c-ck-product-card key={item.id} product-id={item.id} name={item.name} image-url={item.image}
+                            price={item.priceNum} old-price={item.oldPriceNum} category={item.category}
+                            rating={item.rating} description={item.description} availability={item.availability}
+                            is-on-sale={item.isOnSale} discount-percent={item.discountPercent}
+                            is-out-of-stock={item.isOutOfStock} show-category show-rating show-desc show-avail>
+                        </c-ck-product-card>
+                    </template>
+                </div>
+
+                <!-- Pagination -->
+                <div class="cp-pagination">
+                    <button class="cp-page-btn" onclick={handlePrevious}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span class="cp-page-info">{pageInfo}</span>
+                    <button class="cp-page-btn" onclick={handleNext}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </template>
+
+            <!-- Empty -->
+            <template if:false={hasProducts}>
+                <div class="cp-empty">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#CED4DA" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <h2>No products found</h2>
+                    <p>Try adjusting your filters or browse another category.</p>
+                    <button class="cp-clear-big" onclick={handleClearFilters}>Clear All Filters</button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,191 @@
+:host {
+    display: block;
+}
+
+.bn-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px;
+}
+
+.bn-header {
+    margin-bottom: 32px;
+}
+
+.bn-eyebrow {
+    display: block;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #1D9E75;
+    margin-bottom: 4px;
+}
+
+.bn-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #0A1628;
+    margin: 0;
+}
+
+.bn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.bn-card {
+    background: #fff;
+    border: 1px solid #F1F3F5;
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.bn-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    border-color: transparent;
+}
+
+.bn-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.bn-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #0A1628;
+    margin: 0;
+}
+
+.bn-card-save {
+    padding: 4px 14px;
+    background: rgba(29, 158, 117, 0.1);
+    color: #1D9E75;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+}
+
+.bn-card-desc {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    color: #868E96;
+    margin: 0 0 16px;
+}
+
+.bn-items {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.bn-item {
+    flex: 1;
+    min-width: 80px;
+    background: #F8F9FA;
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+}
+
+.bn-item-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto 6px;
+    background: #fff;
+}
+
+.bn-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.bn-item-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.bn-item-name {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0A1628;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bn-item-price {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    color: #868E96;
+}
+
+.bn-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #F1F3F5;
+}
+
+.bn-card-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.bn-card-old {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #ADB5BD;
+    text-decoration: line-through;
+}
+
+.bn-card-new {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #0A1628;
+}
+
+.bn-card-add {
+    padding: 12px 24px;
+    background: #0A1628;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.bn-card-add:hover {
+    background: #FF6B1A;
+    box-shadow: 0 8px 24px rgba(255, 107, 26, 0.3);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .bn-grid {
+        grid-template-columns: 1fr;
+    }
+}

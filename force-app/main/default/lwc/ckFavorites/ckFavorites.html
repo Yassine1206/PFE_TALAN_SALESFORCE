@@ -1,0 +1,99 @@
+<template>
+    <div class="fav-wrapper">
+
+        <!-- Header -->
+        <div class="fav-header">
+            <div class="fav-header-top">
+                <span class="fav-eyebrow">Your collection</span>
+                <h1 class="fav-title">My Wishlist</h1>
+                <template if:true={hasFavorites}>
+                    <p class="fav-subtitle">{favoriteCountText}</p>
+                </template>
+            </div>
+            <template if:true={hasFavorites}>
+                <div class="fav-header-actions">
+                    <button class="fav-addall-btn" onclick={handleAddAll}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+                        </svg>
+                        Add All to Cart
+                    </button>
+                    <a href="/s/" class="fav-continue">Continue Shopping</a>
+                </div>
+            </template>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="fav-loading">
+                <div class="fav-spinner"></div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasFavorites}>
+
+                <!-- Liste horizontale -->
+                <div class="fav-list">
+                    <template for:each={favorites} for:item="item">
+                        <div key={item.favoriteId} class="fav-item">
+
+                            <!-- Image -->
+                            <a href={item.detailUrl} class="fav-item-img">
+                                <img src={item.image} alt={item.name} />
+                            </a>
+
+                            <!-- Info -->
+                            <a href={item.detailUrl} class="fav-item-info">
+                                <span class="fav-item-cat">{item.category}</span>
+                                <span class="fav-item-name">{item.name}</span>
+                                <span class="fav-item-rating">★ {item.rating}</span>
+                            </a>
+
+                            <!-- Actions -->
+                            <div class="fav-item-right">
+                                <span class="fav-item-price">{item.price}</span>
+                                <div class="fav-item-btns">
+                                    <button class="fav-add-btn" data-id={item.productId} onclick={handleQuickAdd}>
+                                        Add to Cart
+                                    </button>
+                                    <button class="fav-rm-btn" data-id={item.productId} onclick={handleRemove}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#E24B4A" stroke="#E24B4A"
+                                            stroke-width="2">
+                                            <path
+                                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </template>
+                </div>
+
+            </template>
+
+            <!-- Empty State -->
+            <template if:false={hasFavorites}>
+                <div class="fav-empty">
+                    <div class="fav-empty-icon">
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#CED4DA" stroke-width="1.2">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2 class="fav-empty-title">Your wishlist is empty</h2>
+                    <p class="fav-empty-text">Browse our products and click the heart icon to save your favorites here.
+                    </p>
+                    <a href="/s/" class="fav-empty-btn">Start Shopping</a>
+                </div>
+            </template>
+        </template>
+
+    </div>
+</template>

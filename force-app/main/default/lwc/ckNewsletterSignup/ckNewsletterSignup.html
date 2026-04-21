@@ -1,0 +1,13 @@
+<template>
+    <section class="ck-newsletter">
+        <div class="ck-newsletter-inner">
+            <h2 class="ck-newsletter-title">{title}</h2>
+            <p class="ck-newsletter-text">{description}</p>
+            <div class="ck-newsletter-form">
+                <input type="email" placeholder="Enter your email" class="ck-newsletter-input" value={email} onchange={handleEmailChange} />
+                <button class="ck-btn ck-btn--primary" onclick={handleSubmit}>Join</button>
+            </div>
+            <p class="ck-newsletter-legal">By subscribing, you agree to our Terms and Privacy Policy.</p>
+        </div>
+    </section>
+</template>

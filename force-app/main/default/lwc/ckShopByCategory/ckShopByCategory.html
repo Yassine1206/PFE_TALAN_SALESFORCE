@@ -1,0 +1,27 @@
+<template>
+    <template if:true={hasCategories}>
+        <div class="sbc-section">
+            <div class="sbc-header">
+                <span class="sbc-eyebrow">Browse</span>
+                <h2 class="sbc-title">Shop by Category</h2>
+            </div>
+            <div class="sbc-grid">
+                <template for:each={categories} for:item="cat">
+                    <a key={cat.name} href={cat.url} class="sbc-card">
+                        <div class="sbc-card-img">
+                            <img src={cat.image} alt={cat.name} />
+                            <div class="sbc-card-overlay"></div>
+                        </div>
+                        <div class="sbc-card-content">
+                            <h3 class="sbc-card-name">{cat.name}</h3>
+                            <!-- <span class="sbc-card-count">{cat.productCount} products</span> -->
+                            <span class="sbc-card-arrow">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </span>
+                        </div>
+                    </a>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

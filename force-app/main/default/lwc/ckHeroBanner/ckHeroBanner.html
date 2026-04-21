@@ -1,0 +1,35 @@
+<template>
+    <section class="ck-hero">
+        <div class="ck-hero-bg">
+            <img src={backgroundImage} alt="" class="ck-hero-bg-img" loading="eager" />
+            <div class="ck-hero-gradient"></div>
+        </div>
+
+        <div class="ck-hero-content">
+            <div class="ck-hero-badge">
+                <span class="ck-badge-dot"></span>
+                {badgeText}
+            </div>
+
+            <h1 class="ck-hero-title">{title}</h1>
+
+            <p class="ck-hero-subtitle">{subtitle}</p>
+
+            <div class="ck-hero-actions">
+                <a href={ctaUrl} class="ck-btn ck-btn--primary">
+                    {ctaLabel}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="/about" class="ck-btn ck-btn--ghost">Learn More</a>
+            </div>
+
+            <div class="ck-hero-scroll">
+                <span class="ck-scroll-text">Scroll</span>
+                <div class="ck-scroll-line"></div>
+            </div>
+        </div>
+    </section>
+</template>

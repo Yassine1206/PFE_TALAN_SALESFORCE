@@ -1,0 +1,542 @@
+<template>
+    <!-- Bouton profil custom avec photo -->
+    <button class="auth-float-btn" onclick={handleProfileClick}>
+        <template if:true={showUserPhoto}>
+            <img src={userPhoto} alt="Profile" class="auth-float-photo" />
+        </template>
+        <template if:false={showUserPhoto}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </template>
+        <template if:true={isLoggedIn}>
+            <span class="auth-online-dot"></span>
+        </template>
+    </button>
+
+    <!-- Overlay -->
+    <template if:true={showModal}>
+        <div class="auth-overlay" onclick={closeModal}>
+            <div class="auth-modal" onclick={stopPropagation}>
+
+                <button class="auth-close" onclick={closeModal}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- ═══ PROFILE VIEW ═══ -->
+                <template if:true={isProfileStep}>
+                    <div class="auth-profile">
+                        <div class="auth-profile-header">
+                            <div class="auth-profile-avatar">
+                                <template if:true={userPhoto}>
+                                    <img src={userPhoto} alt={userFullName} class="auth-profile-img"
+                                        data-id="profileImg" />
+                                </template>
+                                <template if:false={userPhoto}>
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </template>
+                                <span class="auth-profile-online"></span>
+                            </div>
+
+                            <h2 class="auth-title">{userFullName}</h2>
+                            <p class="auth-profile-role">{userEmail}</p>
+                        </div>
+
+                        <!-- Mini-hub links -->
+                        <div class="profile-hub">
+                            <a href="/s/favorites" class="profile-hub-link">
+                                <div class="profile-hub-icon profile-hub-heart">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E24B4A"
+                                        stroke-width="2">
+                                        <path
+                                            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <span class="profile-hub-label">My Wishlist</span>
+                                <span class="profile-hub-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </span>
+                            </a>
+                            <a href="/s/my-orders" class="profile-hub-link">
+                                <div class="profile-hub-icon profile-hub-orders">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                        stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                                    </svg>
+                                </div>
+                                <span class="profile-hub-label">My Orders</span>
+                                <span class="profile-hub-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </span>
+                            </a>
+                            <div class="profile-hub-link" onclick={handleEditProfile}>
+                                <div class="profile-hub-icon profile-hub-edit">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A1628"
+                                        stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <span class="profile-hub-label">Edit Profile</span>
+                                <span class="profile-hub-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Sign Out -->
+                        <div class="auth-profile-actions">
+                            <button class="auth-btn-logout" onclick={confirmLogout}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ CHOICE STEP ═══ -->
+                <template if:true={isChoiceStep}>
+                    <div class="auth-choice">
+                        <div class="auth-logo">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h2 class="auth-title">Welcome</h2>
+                        <p class="auth-subtitle">Sign in to your account or create a new one</p>
+                        <div class="auth-choice-buttons">
+                            <button class="auth-btn-primary" onclick={showSignIn}>Sign In</button>
+                            <button class="auth-btn-ghost" onclick={showAccountType}>Create Account</button>
+                        </div>
+                        <div class="auth-social-divider">
+                            <span class="auth-divider-line"></span>
+                            <span class="auth-divider-text">or continue with</span>
+                            <span class="auth-divider-line"></span>
+                        </div>
+                        <div class="auth-social-buttons">
+                            <button class="auth-social-btn auth-social-google" onclick={loginWithGoogle}>
+                                <svg width="18" height="18" viewBox="0 0 24 24">
+                                    <path
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                                        fill="#4285F4" />
+                                    <path
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                        fill="#34A853" />
+                                    <path
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                        fill="#FBBC05" />
+                                    <path
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                        fill="#EA4335" />
+                                </svg>
+                                Google
+                            </button>
+                            <button class="auth-social-btn auth-social-facebook" onclick={loginWithFacebook}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                                Facebook
+                            </button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ SIGN IN STEP ═══ -->
+                <template if:true={isSignInStep}>
+                    <div class="auth-form-wrap">
+                        <h2 class="auth-title">Sign In</h2>
+                        <p class="auth-subtitle">Welcome back to TalFlow Express</p>
+                        <div class="auth-form">
+                            <div class="auth-field">
+                                <label class="auth-label">Email</label>
+                                <input type="email" class="auth-input" placeholder="you@example.com"
+                                    data-id="loginEmail" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Password</label>
+                                <input type="password" class="auth-input" placeholder="Enter your password"
+                                    data-id="loginPassword" />
+                            </div>
+                            <div class="auth-forgot-link">
+                                <span onclick={handleShowForgotPassword}>Forgot Password?</span>
+                            </div>
+                            <button class="auth-btn-primary auth-btn-full" onclick={handleSignIn}>Sign In</button>
+                            <template if:true={errorMessage}>
+                                <p class="auth-error">{errorMessage}</p>
+                            </template>
+                        </div>
+                        <div class="auth-divider">
+                            <span class="auth-divider-line"></span>
+                            <span class="auth-divider-text">or</span>
+                            <span class="auth-divider-line"></span>
+                        </div>
+                        <button class="auth-btn-ghost auth-btn-full" onclick={showAccountType}>Create Account</button>
+                        <div class="auth-social-divider">
+                            <span class="auth-divider-line"></span>
+                            <span class="auth-divider-text">or sign in with</span>
+                            <span class="auth-divider-line"></span>
+                        </div>
+                        <div class="auth-social-buttons">
+                            <button class="auth-social-btn auth-social-google" onclick={loginWithGoogle}>
+                                <svg width="18" height="18" viewBox="0 0 24 24">
+                                    <path
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                                        fill="#4285F4" />
+                                    <path
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                        fill="#34A853" />
+                                    <path
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                        fill="#FBBC05" />
+                                    <path
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                        fill="#EA4335" />
+                                </svg>
+                                Google
+                            </button>
+                            <button class="auth-social-btn auth-social-facebook" onclick={loginWithFacebook}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                                Facebook
+                            </button>
+                        </div>
+                        <button class="auth-back" onclick={showChoice}>Back</button>
+                    </div>
+                </template>
+
+                <!-- ═══ ACCOUNT TYPE STEP ═══ -->
+                <template if:true={isAccountTypeStep}>
+                    <div class="auth-choice">
+                        <h2 class="auth-title">Choose Account Type</h2>
+                        <p class="auth-subtitle">How will you be using TalFlow Express?</p>
+                        <div class="auth-type-cards">
+                            <div class="auth-type-card" onclick={selectB2C}>
+                                <div class="auth-type-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <h3 class="auth-type-title">Personal</h3>
+                                <p class="auth-type-desc">I'm shopping for myself or as a gift</p>
+                            </div>
+                            <div class="auth-type-card" onclick={selectB2B}>
+                                <div class="auth-type-icon">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 class="auth-type-title">Business</h3>
+                                <p class="auth-type-desc">I'm buying for my company or team</p>
+                            </div>
+                        </div>
+                        <button class="auth-back" onclick={showChoice}>Back</button>
+                    </div>
+                </template>
+
+                <!-- ═══ REGISTER B2C ═══ -->
+                <template if:true={isRegisterB2CStep}>
+                    <div class="auth-form-wrap">
+                        <div class="auth-step-badge">Personal Account</div>
+                        <h2 class="auth-title">Create Account</h2>
+                        <p class="auth-subtitle">Join the TalFlow Express community</p>
+                        <div class="auth-form">
+                            <div class="auth-row">
+                                <div class="auth-field">
+                                    <label class="auth-label">First Name</label>
+                                    <input type="text" class="auth-input" placeholder="John" data-id="b2cFirstName" />
+                                </div>
+                                <div class="auth-field">
+                                    <label class="auth-label">Last Name</label>
+                                    <input type="text" class="auth-input" placeholder="Doe" data-id="b2cLastName" />
+                                </div>
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Email</label>
+                                <input type="email" class="auth-input" placeholder="you@example.com"
+                                    data-id="b2cEmail" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Phone (optional)</label>
+                                <input type="tel" class="auth-input" placeholder="+1 234 567 890" data-id="b2cPhone" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Password</label>
+                                <input type="password" class="auth-input" placeholder="Min. 8 characters"
+                                    data-id="b2cPassword" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Confirm Password</label>
+                                <input type="password" class="auth-input" placeholder="Repeat your password"
+                                    data-id="b2cConfirm" />
+                            </div>
+                            <button class="auth-btn-primary auth-btn-full" onclick={handleRegisterB2C}>Create
+                                Account</button>
+                            <template if:true={errorMessage}>
+                                <p class="auth-error">{errorMessage}</p>
+                            </template>
+                        </div>
+                        <div class="auth-divider">
+                            <span class="auth-divider-line"></span>
+                            <span class="auth-divider-text">or</span>
+                            <span class="auth-divider-line"></span>
+                        </div>
+                        <button class="auth-btn-ghost auth-btn-full" onclick={showSignIn}>Already have an account? Sign
+                            In</button>
+                        <button class="auth-back" onclick={showAccountType}>Back</button>
+                    </div>
+                </template>
+
+                <!-- ═══ REGISTER B2B ═══ -->
+                <template if:true={isRegisterB2BStep}>
+                    <div class="auth-form-wrap">
+                        <div class="auth-step-badge auth-step-badge-business">Business Account</div>
+                        <h2 class="auth-title">Create Business Account</h2>
+                        <p class="auth-subtitle">Set up your company on TalFlow Express</p>
+                        <div class="auth-form">
+                            <div class="auth-field">
+                                <label class="auth-label">Company Name</label>
+                                <input type="text" class="auth-input" placeholder="Acme Corp" data-id="b2bCompany" />
+                            </div>
+                            <div class="auth-row">
+                                <div class="auth-field">
+                                    <label class="auth-label">First Name</label>
+                                    <input type="text" class="auth-input" placeholder="John" data-id="b2bFirstName" />
+                                </div>
+                                <div class="auth-field">
+                                    <label class="auth-label">Last Name</label>
+                                    <input type="text" class="auth-input" placeholder="Doe" data-id="b2bLastName" />
+                                </div>
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Business Email</label>
+                                <input type="email" class="auth-input" placeholder="you@company.com"
+                                    data-id="b2bEmail" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Phone</label>
+                                <input type="tel" class="auth-input" placeholder="+1 234 567 890" data-id="b2bPhone" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Industry</label>
+                                <select class="auth-input auth-select" data-id="b2bIndustry">
+                                    <option value="">Select your industry</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="education">Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Password</label>
+                                <input type="password" class="auth-input" placeholder="Min. 8 characters"
+                                    data-id="b2bPassword" />
+                            </div>
+                            <div class="auth-field">
+                                <label class="auth-label">Confirm Password</label>
+                                <input type="password" class="auth-input" placeholder="Repeat your password"
+                                    data-id="b2bConfirm" />
+                            </div>
+                            <button class="auth-btn-primary auth-btn-full" onclick={handleRegisterB2B}>Create Business
+                                Account</button>
+                            <template if:true={errorMessage}>
+                                <p class="auth-error">{errorMessage}</p>
+                            </template>
+                        </div>
+                        <div class="auth-divider">
+                            <span class="auth-divider-line"></span>
+                            <span class="auth-divider-text">or</span>
+                            <span class="auth-divider-line"></span>
+                        </div>
+                        <button class="auth-btn-ghost auth-btn-full" onclick={showSignIn}>Already have an account? Sign
+                            In</button>
+                        <button class="auth-back" onclick={showAccountType}>Back</button>
+                    </div>
+                </template>
+
+                <!-- ═══ EMAIL VERIFICATION ═══ -->
+                <template if:true={isVerifyStep}>
+                    <div class="auth-choice">
+                        <div class="auth-logo">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                stroke-width="1.5">
+                                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                <polyline points="22,4 12,13 2,4"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="auth-title">Verify your email</h2>
+                        <p class="auth-subtitle">We sent a 6-digit code to <strong>{verificationEmail}</strong></p>
+
+                        <template if:true={verificationMessage}>
+                            <div class="auth-success-msg">{verificationMessage}</div>
+                        </template>
+                        <template if:true={verificationError}>
+                            <div class="auth-error-msg">{verificationError}</div>
+                        </template>
+
+                        <div class="auth-code-input">
+                            <input type="text" class="auth-input auth-code-field" maxlength="6" placeholder="000000"
+                                value={verificationCode} oninput={handleVerificationInput} />
+                        </div>
+
+                        <button class="auth-btn-primary auth-btn-full" onclick={handleVerifyCode}
+                            disabled={isVerifying}>
+                            <template if:true={isVerifying}>Verifying...</template>
+                            <template if:false={isVerifying}>Verify Email</template>
+                        </button>
+
+                        <div class="auth-resend-row">
+                            <span class="auth-resend-text">Didn't receive the code?</span>
+                            <span class="auth-resend-link" onclick={handleResendCode}>Resend</span>
+                        </div>
+
+                        <div class="auth-back-link" onclick={handleBackToSignIn}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Back to Sign In
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ FORGOT PASSWORD ═══ -->
+                <template if:true={isForgotStep}>
+                    <div class="auth-choice">
+                        <div class="auth-logo">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A"
+                                stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                            </svg>
+                        </div>
+                        <h2 class="auth-title">Reset password</h2>
+                        <p class="auth-subtitle">Enter your email and we'll send you a reset link.</p>
+
+                        <template if:true={forgotMessage}>
+                            <div class="auth-success-msg">{forgotMessage}</div>
+                        </template>
+                        <template if:true={forgotError}>
+                            <div class="auth-error-msg">{forgotError}</div>
+                        </template>
+
+                        <div class="auth-form">
+                            <div class="auth-field">
+                                <label class="auth-label">Email</label>
+                                <input type="email" class="auth-input" placeholder="you@example.com" value={forgotEmail}
+                                    oninput={handleForgotEmailInput} />
+                            </div>
+                            <button class="auth-btn-primary auth-btn-full" onclick={handleSendResetLink}
+                                disabled={isSendingReset}>
+                                <template if:true={isSendingReset}>Sending...</template>
+                                <template if:false={isSendingReset}>Send Reset Link</template>
+                            </button>
+                        </div>
+
+                        <div class="auth-back-link" onclick={handleBackToSignIn}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Back to Sign In
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ SUCCESS ═══ -->
+                <template if:true={isSuccessStep}>
+                    <div class="auth-choice">
+                        <div class="auth-logo auth-logo-success">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#45C65A"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="auth-title">You're all set!</h2>
+                        <p class="auth-subtitle">{successMessage}</p>
+                        <div class="auth-choice-buttons">
+                            <button class="auth-btn-primary" onclick={showSignIn}>Sign In Now</button>
+                            <button class="auth-btn-ghost" onclick={closeModal}>Continue Browsing</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ LOADING ═══ -->
+                <template if:true={isLoading}>
+                    <div class="auth-loading">
+                        <div class="auth-spinner"></div>
+                        <p class="auth-loading-text">Creating your account...</p>
+                    </div>
+                </template>
+
+                <!-- ═══ CONFIRM LOGOUT ═══ -->
+                <template if:true={isConfirmLogoutStep}>
+                    <div class="auth-choice">
+                        <div class="auth-logo auth-logo-logout">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E03131"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                        </div>
+                        <h2 class="auth-title">Sign Out?</h2>
+                        <p class="auth-subtitle">Are you sure you want to sign out of your account?</p>
+                        <div class="auth-choice-buttons">
+                            <button class="auth-btn-danger" onclick={handleLogout}>Yes, Sign Out</button>
+                            <button class="auth-btn-ghost" onclick={cancelLogout}>Cancel</button>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- ═══ LOGGING OUT ═══ -->
+                <template if:true={isLoggingOutStep}>
+                    <div class="auth-choice auth-logging-out">
+                        <div class="auth-logout-spinner"></div>
+                        <h2 class="auth-title">Signing Out...</h2>
+                        <p class="auth-subtitle">Thanks for visiting TalFlow Express. See you soon!</p>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+    </template>
+</template>

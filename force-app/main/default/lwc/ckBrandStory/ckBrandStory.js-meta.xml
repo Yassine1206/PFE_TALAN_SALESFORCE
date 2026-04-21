@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>CK Brand Story</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="eyebrow" type="String" default="Est. 2026" label="Eyebrow Text" />
+            <property name="title" type="String" default="Meet TalFlow Express." label="Title" />
+            <property name="description" type="String" default="" label="Description" />
+            <property name="buttonText" type="String" default="Explore Our Collection →"
+                label="Button Text" />
+            <property name="buttonUrl" type="String" default="/shop" label="Button URL" />
+            <property name="imageUrl" type="String" default=""
+                label="Image URL (leave empty for default)" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

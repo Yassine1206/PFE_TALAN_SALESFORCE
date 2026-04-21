@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════
+   CK-HERO — Full-screen hero section
+   ═══════════════════════════════════════ */
+
+:host { display: block; }
+
+.ck-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--ck-black, #0D0D0D);
+}
+
+/* Background */
+.ck-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.ck-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+}
+
+.ck-hero-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 22, 40, 0.4) 0%,
+        rgba(10, 22, 40, 0.7) 50%,
+        var(--ck-blue-deep, #0A1628) 100%
+    );
+}
+
+/* Content */
+.ck-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+    padding: 120px 24px 80px;
+    animation: fadeUp 1s var(--ck-ease, ease) 0.3s both;
+}
+
+/* Badge */
+.ck-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: rgba(255, 107, 26, 0.12);
+    border: 1px solid rgba(255, 107, 26, 0.25);
+    border-radius: 999px;
+    color: var(--ck-orange, #FF6B1A);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+}
+
+.ck-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ck-orange, #FF6B1A);
+    animation: pulse 2s infinite;
+}
+
+/* Title */
+.ck-hero-title {
+    font-family: var(--ck-font-display, 'Montserrat', sans-serif);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: #fff;
+    margin: 0 0 24px;
+    letter-spacing: -0.03em;
+}
+
+/* Subtitle */
+.ck-hero-subtitle {
+    font-family: var(--ck-font-body, 'Lato', sans-serif);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 48px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* CTA Buttons */
+.ck-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ck-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    border-radius: 999px;
+    font-family: var(--ck-font-body, 'Lato', sans-serif);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s var(--ck-ease, ease);
+}
+
+.ck-btn--primary {
+    background: var(--ck-orange, #FF6B1A);
+    color: #fff;
+    border: 2px solid var(--ck-orange, #FF6B1A);
+    box-shadow: 0 8px 32px rgba(255, 107, 26, 0.35);
+}
+
+.ck-btn--primary:hover {
+    background: var(--ck-orange-glow, #FF8C42);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255, 107, 26, 0.5);
+}
+
+.ck-btn--ghost {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.ck-btn--ghost:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Scroll Indicator */
+.ck-hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1s var(--ck-ease, ease) 1s both;
+}
+
+.ck-scroll-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ck-scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--ck-orange, #FF6B1A), transparent);
+    animation: scrollPulse 2s infinite;
+}
+
+/* Animations */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}
+
+@keyframes scrollPulse {
+    0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50%  { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+}
+
+@media (max-width: 768px) {
+    .ck-hero { min-height: 85vh; }
+    .ck-hero-content { padding: 100px 20px 60px; }
+    .ck-hero-scroll { display: none; }
+}

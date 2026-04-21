@@ -1,0 +1,157 @@
+<template>
+    <div
+        style="max-width:560px;margin:40px auto;padding:0 24px 60px;box-sizing:border-box;font-family:Arial,sans-serif;">
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div style="text-align:center;padding:60px 0;">
+                <div class="oc-spinner"></div>
+                <p style="font-size:14px;color:#868E96;margin:16px 0 0;">Verifying your payment...</p>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+
+            <!-- Success -->
+            <template if:true={isSuccess}>
+
+                <!-- Icon + Title -->
+                <div style="text-align:center;margin-bottom:28px;">
+                    <div style="width:72px;height:72px;border-radius:50%;background:#E1F5EE;
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2"
+                            stroke-linecap="round">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <h1 style="font-size:24px;font-weight:800;color:#0A1628;margin:0 0 8px;">
+                        Order Confirmed!
+                    </h1>
+                    <p style="font-size:14px;color:#868E96;line-height:1.7;margin:0;">
+                        Thank you for your purchase. A confirmation email has been sent to your inbox.
+                    </p>
+                </div>
+
+                <!-- Order Details -->
+                <div style="background:#F8F9FA;border-radius:14px;padding:4px 20px;margin-bottom:20px;">
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;border-bottom:1px solid #E9ECEF;">
+                        <span style="font-size:13px;color:#868E96;">Status</span>
+                        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;
+                                     background:#E1F5EE;color:#085041;border-radius:999px;
+                                     font-size:12px;font-weight:700;">
+                            <svg width="8" height="8" viewBox="0 0 10 10">
+                                <circle cx="5" cy="5" r="5" fill="#1D9E75" />
+                            </svg>
+                            Payment Received
+                        </span>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;border-bottom:1px solid #E9ECEF;">
+                        <span style="font-size:13px;color:#868E96;">Order Number</span>
+                        <span style="font-size:13px;font-weight:700;color:#0A1628;">
+                            #{orderNumber}
+                        </span>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;border-bottom:1px solid #E9ECEF;">
+                        <span style="font-size:13px;color:#868E96;">Order Date</span>
+                        <span style="font-size:13px;color:#0A1628;">{orderDate}</span>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;border-bottom:1px solid #E9ECEF;">
+                        <span style="font-size:13px;color:#868E96;">Payment Method</span>
+                        <span style="font-size:13px;font-weight:700;color:#0A1628;">{paymentMethod}</span>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;border-bottom:1px solid #E9ECEF;">
+                        <span style="font-size:13px;color:#868E96;">Shipping To</span>
+                        <span style="font-size:13px;color:#0A1628;">{shippingTo}</span>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                padding:13px 0;">
+                        <span style="font-size:13px;color:#868E96;">Total TTC</span>
+                        <span style="font-size:16px;font-weight:800;color:#FF6B1A;">${totalTTC}</span>
+                    </div>
+
+                </div>
+
+                <!-- Info box -->
+                <div style="background:#FFF8F5;border:1.5px solid #FFE4D4;border-radius:12px;
+                            padding:16px 20px;margin-bottom:28px;display:flex;gap:12px;align-items:flex-start;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" stroke-width="2"
+                        style="flex-shrink:0;margin-top:2px;">
+                        <rect x="1" y="3" width="15" height="13" />
+                        <path d="M16 8h4l3 3v5h-7V8z" />
+                        <circle cx="5.5" cy="18.5" r="2.5" />
+                        <circle cx="18.5" cy="18.5" r="2.5" />
+                    </svg>
+                    <p style="font-size:13px;color:#495057;line-height:1.6;margin:0;">
+                        Your order is being prepared. You will receive a shipping
+                        confirmation with tracking information once dispatched.
+                    </p>
+                </div>
+
+                <!-- Actions -->
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <a href="/s/" style="display:block;padding:14px;background:#FF6B1A;color:#fff;
+                                         border-radius:12px;font-size:13px;font-weight:700;
+                                         text-align:center;text-decoration:none;
+                                         text-transform:uppercase;letter-spacing:0.04em;">
+                        Continue Shopping
+                    </a>
+                    <a href="/s/my-orders" style="display:block;padding:13px;background:transparent;
+                                                   color:#868E96;border-radius:12px;font-size:13px;
+                                                   font-weight:700;text-align:center;text-decoration:none;
+                                                   border:1.5px solid #E9ECEF;">
+                        View My Orders
+                    </a>
+                </div>
+
+            </template>
+
+            <!-- Error -->
+            <template if:false={isSuccess}>
+                <div style="text-align:center;padding:20px 0;">
+                    <div style="width:72px;height:72px;border-radius:50%;background:#FCEBEB;
+                                display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="2"
+                            stroke-linecap="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="15" y1="9" x2="9" y2="15" />
+                            <line x1="9" y1="9" x2="15" y2="15" />
+                        </svg>
+                    </div>
+                    <h1 style="font-size:24px;font-weight:800;color:#E24B4A;margin:0 0 10px;">
+                        Payment Issue
+                    </h1>
+                    <p style="font-size:14px;color:#868E96;line-height:1.7;margin:0 0 28px;">
+                        {errorMessage}
+                    </p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <a href="/s/checkout" style="display:block;padding:14px;background:#E24B4A;
+                                                      color:#fff;border-radius:12px;font-size:13px;
+                                                      font-weight:700;text-align:center;text-decoration:none;
+                                                      text-transform:uppercase;letter-spacing:0.04em;">
+                            Try Again
+                        </a>
+                        <a href="/s/" style="display:block;padding:13px;background:transparent;
+                                              color:#868E96;border-radius:12px;font-size:13px;
+                                              font-weight:700;text-align:center;text-decoration:none;
+                                              border:1.5px solid #E9ECEF;">
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </template>
+
+        </template>
+    </div>
+</template>

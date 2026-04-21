@@ -1,0 +1,51 @@
+<template>
+    <a href={detailUrl} class={cardClass} data-id={productId}>
+        <div class="ck-card-img">
+            <img src={safeImage} alt={name} loading="lazy" />
+            <!-- Ribbon diagonal (hot deals) -->
+            <template if:true={showRibbon}>
+                <div class="ck-ribbon">-{discountPercent}%</div>
+            </template>
+
+            <!-- Badge sale classique (si pas ribbon) -->
+            <template if:false={showRibbon}>
+                <template if:true={isOnSale}>
+                    <span class="ck-badge-sale">-{discountPercent}%</span>
+                </template>
+            </template>
+
+            <template if:true={showAvailability}>
+                <span class={availabilityClass}>{availability}</span>
+            </template>
+            <template if:true={isNew}>
+                <span class="ck-badge-new">New</span>
+            </template>
+            <div class="ck-card-overlay">
+                <button class="ck-overlay-btn ck-btn-add" onclick={handleAddToCart}>Quick Add</button>
+                <button class="ck-overlay-btn ck-btn-view" onclick={handleViewDetails}>View Details</button>
+            </div>
+        </div>
+        <div class="ck-card-body">
+            <template if:true={showMeta}>
+                <div class="ck-card-meta">
+                    <template if:true={category}>
+                        <span class="ck-card-cat">{category}</span>
+                    </template>
+                    <template if:true={rating}>
+                        <span class="ck-card-rating">&#9733; {rating}</span>
+                    </template>
+                </div>
+            </template>
+            <h3 class="ck-card-name">{name}</h3>
+            <template if:true={showDescription}>
+                <p class="ck-card-desc">{shortDescription}</p>
+            </template>
+            <div class="ck-card-price">
+                <span class={priceClass}>{formattedPrice}</span>
+                <template if:true={isOnSale}>
+                    <span class="ck-price-old">{formattedOldPrice}</span>
+                </template>
+            </div>
+        </div>
+    </a>
+</template>

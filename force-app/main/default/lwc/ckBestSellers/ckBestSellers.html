@@ -1,0 +1,18 @@
+<template>
+    <template if:true={hasProducts}>
+        <div class="bs-section">
+            <div class="bs-header">
+                <span class="bs-eyebrow">Trending now</span>
+                <h2 class="bs-title">Best Sellers</h2>
+            </div>
+            <div class="bs-track" onmousedown={handleMouseDown} onmousemove={handleMouseMove} onmouseup={handleMouseUp}
+                onmouseleave={handleMouseLeave}>
+                <template for:each={products} for:item="item">
+                    <c-ck-product-card key={item.id} product-id={item.id} name={item.name} image-url={item.image}
+                        price={item.priceNum} rating={item.rating} show-rating variant="bestseller">
+                    </c-ck-product-card>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,59 @@
+<template>
+    <div class="ck-section">
+        <div class="ck-section-header">
+            <h2 class="ck-section-title">{sectionTitle}</h2>
+            <p class="ck-section-subtitle">{sectionSubtitle}</p>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="cat-filter">
+            <template for:each={categories} for:item="cat">
+                <button key={cat.name} class={cat.className} data-cat={cat.name} onclick={handleCategoryClick}>
+                    {cat.name}
+                </button>
+            </template>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="carousel-loading">
+                <div class="carousel-spinner"></div>
+            </div>
+        </template>
+
+        <!-- Carousel -->
+        <template if:false={isLoading}>
+            <template if:true={hasProducts}>
+                <div class="carousel-wrapper">
+                    <button class="carousel-arrow carousel-arrow-left" onclick={scrollLeft}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    <div class="carousel-track" data-id="track">
+                        <template for:each={carouselItems} for:item="item">
+                            <c-ck-product-card key={item.id} product-id={item.id} name={item.name}
+                                image-url={item.image} price={item.priceNum} onaddtocart={handleQuickAdd}>
+                            </c-ck-product-card>
+                        </template>
+                    </div>
+
+                    <button class="carousel-arrow carousel-arrow-right" onclick={scrollRight}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </template>
+
+            <template if:false={hasProducts}>
+                <div class="carousel-empty">
+                    <p>No products found in this category.</p>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>CK Hero Banner</masterLabel>
+    <description>Full-screen hero with gradient overlay and CTA</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="title" type="String" default="CloudKicks" label="Hero Title" />
+            <property name="subtitle" type="String" default="Step into the future of comfort." label="Subtitle" />
+            <property name="ctaLabel" type="String" default="Shop the Drop" label="CTA Label" />
+            <property name="ctaUrl" type="String" default="/shop" label="CTA URL" />
+            <property name="badgeText" type="String" default="New Drop Available" label="Badge Text" />
+            <property name="backgroundImage" type="String" default="/sfsites/c/resource/ckHeroBg" label="Background Image URL" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

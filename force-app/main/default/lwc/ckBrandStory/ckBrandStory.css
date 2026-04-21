@@ -1,0 +1,117 @@
+:host {
+    display: block;
+}
+
+.ck-section-gray {
+    background: #F8F9FA;
+    padding: 80px 24px;
+    width: 100%;
+}
+
+.ck-story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.ck-story-eyebrow {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #FF6B1A;
+    margin-bottom: 16px;
+    padding: 6px 18px;
+    background: rgba(255, 107, 26, 0.08);
+    border-radius: 999px;
+}
+
+.ck-story-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #0A1628;
+    margin: 0 0 20px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.ck-story-body {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #495057;
+    margin: 0 0 36px;
+}
+
+/* Bouton */
+.ck-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    border-radius: 999px;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 2px solid transparent;
+    line-height: 1.2;
+}
+
+.ck-btn-primary {
+    background: #FF6B1A;
+    color: #fff;
+    border-color: #FF6B1A;
+    box-shadow: 0 8px 32px rgba(255, 107, 26, 0.35);
+}
+
+.ck-btn-primary:hover {
+    background: #FF8C42;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255, 107, 26, 0.5);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Image */
+.ck-story-visual {
+    position: relative;
+}
+
+.ck-story-visual img {
+    width: 100%;
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
+    display: block;
+}
+
+.ck-story-accent {
+    position: absolute;
+    top: -24px;
+    right: -24px;
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, #FF6B1A, #FF8C42);
+    border-radius: 50%;
+    opacity: 0.12;
+    z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ck-story-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}

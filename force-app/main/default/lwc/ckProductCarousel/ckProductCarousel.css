@@ -1,0 +1,186 @@
+:host {
+    display: block;
+}
+
+/* Section */
+.ck-section {
+    padding: 80px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.ck-section-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.ck-section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #0A1628;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.ck-section-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    color: #868E96;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.55;
+}
+
+/* Carousel wrapper */
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Track */
+.carousel-track {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 16px 4px 24px;
+    flex: 1;
+    min-width: 0;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* Cartes enfant — 4 visibles */
+c-ck-product-card {
+    flex: 0 0 calc((100% - 72px) / 4);
+    min-width: 220px;
+    scroll-snap-align: start;
+}
+
+/* Arrows */
+.carousel-arrow {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(10, 22, 40, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+    padding: 0;
+}
+
+.carousel-arrow:hover {
+    background: #FF6B1A;
+    border-color: #FF6B1A;
+    box-shadow: 0 8px 24px rgba(255, 107, 26, 0.4);
+    transform: scale(1.1);
+}
+
+/* Category Filter */
+.cat-filter {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    padding: 0 16px;
+}
+
+.cat-btn {
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1.5px solid #E9ECEF;
+    background: #fff;
+    color: #495057;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cat-btn:hover {
+    border-color: #0A1628;
+    color: #0A1628;
+}
+
+.cat-btn-active {
+    background: #0A1628;
+    color: #fff;
+    border-color: #0A1628;
+}
+
+.cat-btn-active:hover {
+    background: #FF6B1A;
+    border-color: #FF6B1A;
+}
+
+/* Loading */
+.carousel-loading {
+    display: flex;
+    justify-content: center;
+    padding: 64px 0;
+}
+
+.carousel-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #E9ECEF;
+    border-top-color: #FF6B1A;
+    border-radius: 50%;
+    animation: carouselSpin 0.8s linear infinite;
+}
+
+@keyframes carouselSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty State */
+.carousel-empty {
+    text-align: center;
+    padding: 48px 0;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    color: #868E96;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    c-ck-product-card {
+        flex: 0 0 calc((100% - 48px) / 3);
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-arrow {
+        display: none;
+    }
+
+    c-ck-product-card {
+        flex: 0 0 calc((100% - 24px) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    c-ck-product-card {
+        flex: 0 0 85%;
+    }
+}

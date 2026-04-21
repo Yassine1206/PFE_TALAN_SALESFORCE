@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "d:/formation salesforce/projet_PFE_TALAN"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "d:/formation salesforce/projet_PFE_TALAN"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "d:\\formation salesforce\\projet_PFE_TALAN\\.eslintrc.json"
+    }
+  }
+}

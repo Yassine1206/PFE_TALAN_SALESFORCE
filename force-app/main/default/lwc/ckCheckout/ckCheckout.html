@@ -1,0 +1,364 @@
+<template>
+    <div class="ck-checkout-wrapper">
+
+        <!-- Progress Bar -->
+        <div class="ck-progress">
+            <template for:each={steps} for:item="step">
+                <div key={step.id} class={step.cls}>
+                    <div class="ck-step-circle">{step.num}</div>
+                    <span class="ck-step-label">{step.label}</span>
+                </div>
+            </template>
+        </div>
+
+        <!-- ÉTAPE 1 — Adresse -->
+        <template if:true={isStep1}>
+            <div class="ck-card">
+                <h2 class="ck-card-title">Shipping Address</h2>
+
+                <div class="ck-form-row">
+                    <div class="ck-form-group">
+                        <label class="ck-label">Full Name</label>
+                        <input class="ck-input" type="text" data-field="fullName" value={form.fullName}
+                            onchange={handleInput} />
+                    </div>
+                    <div class="ck-form-group">
+                        <label class="ck-label">Email</label>
+                        <input class="ck-input" type="email" data-field="email" value={form.email}
+                            onchange={handleInput} />
+                    </div>
+                </div>
+
+                <div class="ck-form-row">
+                    <div class="ck-form-group ck-full">
+                        <label class="ck-label">Street Address</label>
+                        <input class="ck-input" type="text" data-field="street" value={form.street}
+                            onchange={handleInput} />
+                    </div>
+                </div>
+
+                <div class="ck-form-row">
+                    <div class="ck-form-group">
+                        <label class="ck-label">City</label>
+                        <input class="ck-input" type="text" data-field="city" value={form.city}
+                            onchange={handleInput} />
+                    </div>
+                    <div class="ck-form-group">
+                        <label class="ck-label">Postal Code</label>
+                        <input class="ck-input" type="text" data-field="postalCode" value={form.postalCode}
+                            onchange={handleInput} />
+                    </div>
+                </div>
+
+                <div class="ck-form-row">
+                    <div class="ck-form-group">
+                        <label class="ck-label">Country</label>
+                        <select class="ck-select" data-field="countryCode" onchange={handleCountryChange}>
+                            <template for:each={countries} for:item="c">
+                                <option key={c.value} value={c.value} selected={c.selected}>
+                                    {c.label}
+                                </option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="ck-form-group">
+                        <label class="ck-label">Phone</label>
+                        <input class="ck-input" type="tel" data-field="phone" value={form.phone}
+                            onchange={handleInput} />
+                    </div>
+                </div>
+
+                <button class="ck-btn-primary" onclick={goStep2}>
+                    Continue to Shipping
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </template>
+
+        <!-- ÉTAPE 2 — Livraison + Promo + TVA -->
+        <template if:true={isStep2}>
+            <div class="ck-card">
+                <h2 class="ck-card-title">Shipping & Taxes</h2>
+
+                <!-- Résumé livraison -->
+                <div class="ck-shipping-info">
+                    <div class="ck-shipping-row">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13" />
+                            <path d="M16 8h4l3 3v5h-7V8z" />
+                            <circle cx="5.5" cy="18.5" r="2.5" />
+                            <circle cx="18.5" cy="18.5" r="2.5" />
+                        </svg>
+                        <div>
+                            <span class="ck-shipping-label">
+                                Delivery to {form.countryCode}
+                            </span>
+                            <span class="ck-shipping-days">
+                                {summary.deliveryDays}
+                            </span>
+                        </div>
+                        <span class="ck-shipping-cost">
+                            ${summary.shippingCost}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- TVA chargée -->
+                <template if:true={isTaxLoading}>
+                    <div class="ck-tax-loading">
+                        <div class="ck-mini-spinner"></div>
+                        <span>Calculating taxes for {form.countryCode}...</span>
+                    </div>
+                </template>
+                <template if:false={isTaxLoading}>
+                    <div class="ck-tax-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                        VAT {summary.taxRate}% applied for {form.countryCode}
+                        <template if:true={summary.isFallbackRate}>
+                            <span class="ck-fallback-note">(estimated)</span>
+                        </template>
+                    </div>
+                </template>
+
+                <!-- Code promo -->
+                <div class="ck-promo-section">
+                    <label class="ck-label">Promo Code</label>
+                    <div class="ck-promo-row">
+                        <input class="ck-input" type="text" placeholder="Enter promo code" data-field="promoCode"
+                            value={form.promoCode} onchange={handleInput} />
+                        <button class="ck-btn-outline" onclick={applyPromo}>
+                            Apply
+                        </button>
+                    </div>
+                    <template if:true={promoMessage}>
+                        <p class={promoMessageCls}>{promoMessage}</p>
+                    </template>
+                </div>
+
+                <!-- Mini récap -->
+                <div class="ck-mini-recap">
+                    <div class="ck-recap-row">
+                        <span>Subtotal</span>
+                        <span>${summary.subtotal}</span>
+                    </div>
+                    <template if:true={hasDiscount}>
+                        <div class="ck-recap-row ck-recap-discount">
+                            <span>Discount</span>
+                            <span>-${summary.discount}</span>
+                        </div>
+                    </template>
+                    <div class="ck-recap-row">
+                        <span>VAT ({summary.taxRate}%)</span>
+                        <span>${summary.taxAmount}</span>
+                    </div>
+                    <div class="ck-recap-row">
+                        <span>Shipping</span>
+                        <span>${summary.shippingCost}</span>
+                    </div>
+                    <div class="ck-recap-row ck-recap-total">
+                        <span>Total TTC</span>
+                        <span>${summary.totalTTC}</span>
+                    </div>
+                </div>
+
+                <div class="ck-btn-row">
+                    <button class="ck-btn-ghost" onclick={goStep1}>
+                        Back
+                    </button>
+                    <button class="ck-btn-primary" onclick={goStep3}>
+                        Choose Payment
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- ÉTAPE 3 — Choix paiement -->
+        <template if:true={isStep3}>
+            <div class="ck-card">
+                <h2 class="ck-card-title">Payment Method</h2>
+
+                <!-- Card (Stripe) -->
+                <div class={cardMethodCls} onclick={selectCard} data-method="Card">
+                    <div class="ck-method-radio">
+                        <template if:true={isCardSelected}>
+                            <div class="ck-radio-dot"></div>
+                        </template>
+                    </div>
+                    <div class="ck-method-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="ck-method-info">
+                        <span class="ck-method-name">Credit / Debit Card</span>
+                        <span class="ck-method-desc">
+                            Secured by Stripe — Visa, Mastercard, Amex
+                        </span>
+                    </div>
+                    <div class="ck-method-badges">
+                        <span class="ck-badge">Stripe</span>
+                        <span class="ck-badge">PCI-DSS</span>
+                    </div>
+                </div>
+
+                <!-- COD -->
+                <div class={codMethodCls} onclick={selectCOD} data-method="COD">
+                    <div class="ck-method-radio">
+                        <template if:true={isCODSelected}>
+                            <div class="ck-radio-dot"></div>
+                        </template>
+                    </div>
+                    <div class="ck-method-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" />
+                        </svg>
+                    </div>
+                    <div class="ck-method-info">
+                        <span class="ck-method-name">Cash on Delivery</span>
+                        <span class="ck-method-desc">
+                            Pay when your order arrives
+                        </span>
+                    </div>
+                    <div class="ck-method-badges">
+                        <span class="ck-badge ck-badge-green">Free</span>
+                    </div>
+                </div>
+
+                <div class="ck-btn-row">
+                    <button class="ck-btn-ghost" onclick={goStep2}>Back</button>
+                    <button class="ck-btn-primary" onclick={goStep4}>
+                        Review Order
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- ÉTAPE 4 — Récap TTC + Confirm -->
+        <template if:true={isStep4}>
+            <div class="ck-card">
+                <h2 class="ck-card-title">Order Summary</h2>
+
+                <!-- Items -->
+                <div class="ck-items-list">
+                    <template for:each={cartItems} for:item="item">
+                        <div key={item.id} class="ck-item-row">
+                            <div class="ck-item-img">
+                                <img src={item.image} alt={item.name} />
+                            </div>
+                            <div class="ck-item-info">
+                                <span class="ck-item-name">{item.name}</span>
+                                <span class="ck-item-qty">
+                                    Qty: {item.quantity}
+                                </span>
+                            </div>
+                            <span class="ck-item-price">{item.price}</span>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Adresse livraison -->
+                <div class="ck-address-recap">
+                    <span class="ck-recap-section-title">
+                        Shipping to
+                    </span>
+                    <p>{form.fullName} — {form.street},
+                        {form.city} {form.postalCode},
+                        {form.countryCode}
+                    </p>
+                </div>
+
+                <!-- Méthode paiement -->
+                <div class="ck-payment-recap">
+                    <span class="ck-recap-section-title">Payment</span>
+                    <span class={paymentMethodBadge}>{form.paymentMethod}</span>
+                </div>
+
+                <!-- Récap TTC final -->
+                <div class="ck-final-recap">
+                    <div class="ck-recap-row">
+                        <span>Subtotal</span>
+                        <span>${summary.subtotal}</span>
+                    </div>
+                    <template if:true={hasDiscount}>
+                        <div class="ck-recap-row ck-recap-discount">
+                            <span>Discount ({form.promoCode})</span>
+                            <span>-${summary.discount}</span>
+                        </div>
+                    </template>
+                    <div class="ck-recap-row">
+                        <span>VAT ({summary.taxRate}%)</span>
+                        <span>${summary.taxAmount}</span>
+                    </div>
+                    <div class="ck-recap-row">
+                        <span>Shipping ({summary.deliveryDays})</span>
+                        <span>${summary.shippingCost}</span>
+                    </div>
+                    <div class="ck-recap-row ck-recap-total">
+                        <span>Total TTC</span>
+                        <span>${summary.totalTTC}</span>
+                    </div>
+                </div>
+
+                <!-- COD notice -->
+                <template if:true={isCODSelected}>
+                    <div class="ck-cod-notice">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B1A" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        You will pay <strong>${summary.totalTTC}</strong>
+                        upon delivery. Order status will be
+                        <strong>Awaiting Delivery Payment</strong>.
+                    </div>
+                </template>
+
+                <template if:true={isLoading}>
+                    <div class="ck-loading">
+                        <div class="ck-spinner"></div>
+                        <span>Processing your order...</span>
+                    </div>
+                </template>
+
+                <template if:false={isLoading}>
+                    <div class="ck-btn-row">
+                        <button class="ck-btn-ghost" onclick={goStep3}>
+                            Back
+                        </button>
+                        <button class="ck-btn-confirm" onclick={placeOrder}>
+                            <template if:true={isCODSelected}>
+                                Place Order (COD)
+                            </template>
+                            <template if:false={isCODSelected}>
+                                Pay ${summary.totalTTC}
+                            </template>
+                        </button>
+                    </div>
+                </template>
+
+                <template if:true={errorMessage}>
+                    <p class="ck-error">{errorMessage}</p>
+                </template>
+            </div>
+        </template>
+
+    </div>
+</template>

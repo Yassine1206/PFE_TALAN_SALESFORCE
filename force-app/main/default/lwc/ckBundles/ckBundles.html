@@ -1,0 +1,43 @@
+<template>
+    <template if:true={hasBundles}>
+        <div class="bn-section">
+            <div class="bn-header">
+                <span class="bn-eyebrow">Save more</span>
+                <h2 class="bn-title">Bundles</h2>
+            </div>
+            <div class="bn-grid">
+                <template for:each={bundles} for:item="bundle">
+                    <div key={bundle.id} class="bn-card">
+                        <div class="bn-card-top">
+                            <h3 class="bn-card-name">{bundle.name}</h3>
+                            <span class="bn-card-save">Save {bundle.savings}</span>
+                        </div>
+                        <template if:true={bundle.description}>
+                            <p class="bn-card-desc">{bundle.description}</p>
+                        </template>
+                        <div class="bn-items">
+                            <template for:each={bundle.items} for:item="item">
+                                <div key={item.id} class="bn-item">
+                                    <div class="bn-item-img">
+                                        <img src={item.image} alt={item.name} />
+                                    </div>
+                                    <div class="bn-item-info">
+                                        <span class="bn-item-name">{item.name}</span>
+                                        <span class="bn-item-price">{item.price}</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="bn-card-footer">
+                            <div class="bn-card-pricing">
+                                <span class="bn-card-old">{bundle.originalPrice}</span>
+                                <span class="bn-card-new">{bundle.bundlePrice}</span>
+                            </div>
+                            <button class="bn-card-add" data-id={bundle.id} onclick={handleAddBundle}>Add Bundle to Cart</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

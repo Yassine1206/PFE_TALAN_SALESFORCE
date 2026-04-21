@@ -1,0 +1,118 @@
+<template>
+    <div class="sr-wrapper">
+        <!-- Search Header -->
+        <div class="sr-header">
+            <div class="sr-search-bar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#868E96" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" class="sr-search-input" value={searchTerm}
+                    oninput={handleSearchInput}
+                    onkeydown={handleSearchKeyDown}
+                    placeholder="Search products..." />
+                <button class="sr-search-btn" onclick={handleSearchClick}>Search</button>
+            </div>
+            <template if:true={searchTerm}>
+                <h1 class="sr-title">Results for "{searchTerm}"</h1>
+                <p class="sr-count">{resultCountText}</p>
+            </template>
+        </div>
+
+        <!-- Filters -->
+        <div class="sr-filters">
+            <div class="sr-categories">
+                <template for:each={categories} for:item="cat">
+                    <button key={cat.name} class={cat.className}
+                        data-cat={cat.name}
+                        onclick={handleCategoryClick}>{cat.name}</button>
+                </template>
+            </div>
+            <div class="sr-filter-row">
+                <div class="sr-price-filter">
+                    <input type="number" class="sr-price-input" placeholder="Min $"
+                        value={minPrice} onchange={handleMinPrice} />
+                    <span class="sr-price-dash">—</span>
+                    <input type="number" class="sr-price-input" placeholder="Max $"
+                        value={maxPrice} onchange={handleMaxPrice} />
+                    <button class="sr-filter-apply" onclick={handlePriceFilter}>Apply</button>
+                </div>
+                <div class="sr-sort">
+                    <select class="sr-sort-select" onchange={handleSortChange}>
+                        <template for:each={sortOptions} for:item="opt">
+                            <option key={opt.value} value={opt.value}
+                                selected={opt.selected}>{opt.label}</option>
+                        </template>
+                    </select>
+                </div>
+                <button class="sr-clear" onclick={handleClearFilters}>Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="sr-loading">
+                <div class="sr-spinner"></div>
+            </div>
+        </template>
+
+        <template if:false={isLoading}>
+            <template if:true={hasResults}>
+                <div class="sr-grid">
+                    <template for:each={results} for:item="item">
+                        <!-- onaddtocart supprimé — ckProductCard dispatche sur window -->
+                        <c-ck-product-card
+                            key={item.id}
+                            product-id={item.id}
+                            name={item.name}
+                            image-url={item.image}
+                            price={item.priceNum}
+                            category={item.category}
+                            rating={item.rating}
+                            description={item.description}
+                            show-category
+                            show-rating
+                            show-desc>
+                        </c-ck-product-card>
+                    </template>
+                </div>
+
+                <!-- Pagination -->
+                <div class="sr-pagination">
+                    <button class="sr-page-btn" onclick={handlePrevious}
+                        disabled={isFirstPage}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        Previous
+                    </button>
+                    <span class="sr-page-info">{pageInfo}</span>
+                    <button class="sr-page-btn" onclick={handleNext}
+                        disabled={isLastPage}>
+                        Next
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </template>
+
+            <template if:false={hasResults}>
+                <div class="sr-empty">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="#CED4DA" stroke-width="1.5">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <h2>No products found</h2>
+                    <p>Try a different search term or adjust your filters.</p>
+                    <button class="sr-clear-btn" onclick={handleClearFilters}>
+                        Clear All Filters
+                    </button>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

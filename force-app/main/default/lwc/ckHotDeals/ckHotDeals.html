@@ -1,0 +1,50 @@
+<template>
+    <template if:true={hasProducts}>
+        <div class="hd-section">
+            <div class="hd-header">
+                <div>
+                    <span class="hd-eyebrow">Limited time</span>
+                    <h2 class="hd-title">Hot Deals</h2>
+                </div>
+                <div class="hd-countdown">
+                    <div class="hd-cd-block">
+                        <span class="hd-cd-num">{countdown.days}</span>
+                        <span class="hd-cd-label">Days</span>
+                    </div>
+                    <span class="hd-cd-sep">:</span>
+                    <div class="hd-cd-block">
+                        <span class="hd-cd-num">{countdown.hours}</span>
+                        <span class="hd-cd-label">Hrs</span>
+                    </div>
+                    <span class="hd-cd-sep">:</span>
+                    <div class="hd-cd-block">
+                        <span class="hd-cd-num">{countdown.minutes}</span>
+                        <span class="hd-cd-label">Min</span>
+                    </div>
+                    <span class="hd-cd-sep">:</span>
+                    <div class="hd-cd-block">
+                        <span class="hd-cd-num">{countdown.seconds}</span>
+                        <span class="hd-cd-label">Sec</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hd-grid">
+                <template for:each={products} for:item="item">
+                    <c-ck-product-card
+                        key={item.id}
+                        product-id={item.id}
+                        name={item.name}
+                        image-url={item.image}
+                        price={item.priceNum}
+                        old-price={item.oldPriceNum}
+                        category={item.category}
+                        is-on-sale={item.isOnSale}
+                        discount-percent={item.discountPercent}
+                        show-category
+                        variant="hotdeal">
+                    </c-ck-product-card>
+                </template>
+            </div>
+        </div>
+    </template>
+</template>

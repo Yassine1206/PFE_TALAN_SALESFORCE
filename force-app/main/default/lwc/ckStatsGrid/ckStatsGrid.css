@@ -1,0 +1,63 @@
+:host {
+    display: block;
+}
+
+.ck-section {
+    padding: 80px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.ck-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.ck-stat-card {
+    text-align: center;
+    padding: 36px 16px;
+    background: #fff;
+    border: 1px solid #F1F3F5;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.ck-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(255, 107, 26, 0.2);
+}
+
+.ck-stat-value {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #FF6B1A;
+    margin-bottom: 6px;
+}
+
+.ck-stat-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #868E96;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+    .ck-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .ck-stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+}

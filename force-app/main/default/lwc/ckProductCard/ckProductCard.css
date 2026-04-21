@@ -1,0 +1,290 @@
+:host {
+    display: block;
+}
+
+.ck-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #F1F3F5;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.ck-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    border-color: transparent;
+}
+
+/* Image */
+.ck-card-img {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: #F8F9FA;
+}
+
+.ck-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.ck-card:hover .ck-card-img img {
+    transform: scale(1.05);
+}
+
+/* Badges */
+.ck-badge-sale {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #E24B4A;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+.ck-badge-new {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #0A1628;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+/* Availability */
+.ck-avail {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+.ck-avail-in {
+    background: rgba(29, 158, 117, 0.12);
+    color: #1D9E75;
+}
+
+.ck-avail-out {
+    background: rgba(226, 75, 74, 0.12);
+    color: #E24B4A;
+}
+
+.ck-avail-order {
+    background: rgba(255, 107, 26, 0.12);
+    color: #FF6B1A;
+}
+
+/* Overlay */
+.ck-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.ck-card:hover .ck-card-overlay {
+    transform: translateY(0);
+}
+
+.ck-overlay-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ck-btn-add {
+    background: #FF6B1A;
+    color: #fff;
+}
+
+.ck-btn-add:hover {
+    background: #FF8C42;
+}
+
+.ck-btn-view {
+    background: rgba(255, 255, 255, 0.95);
+    color: #0A1628;
+}
+
+.ck-btn-view:hover {
+    background: #fff;
+}
+
+/* Body */
+.ck-card-body {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Meta (category + rating) */
+.ck-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.ck-card-cat {
+    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #FF6B1A;
+}
+
+.ck-card-rating {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #FFB800;
+}
+
+/* Name */
+.ck-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0A1628;
+    margin: 0 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Description */
+.ck-card-desc {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #868E96;
+    margin: 0 0 8px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Price */
+.ck-card-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.ck-price-current {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #FF6B1A;
+}
+
+.ck-price-old {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #ADB5BD;
+    text-decoration: line-through;
+}
+
+/* ═══ VARIANT: Hot Deal ═══ */
+.ck-card-hotdeal {
+    border: 2px solid #E24B4A;
+}
+
+.ck-card-hotdeal:hover {
+    border-color: #E24B4A;
+    box-shadow: 0 12px 32px rgba(226, 75, 74, 0.2);
+}
+
+/* Ribbon diagonal */
+.ck-ribbon {
+    position: absolute;
+    top: 14px;
+    right: -32px;
+    background: #E24B4A;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 40px;
+    transform: rotate(45deg);
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(226, 75, 74, 0.4);
+    letter-spacing: 0.04em;
+}
+
+/* Hot deal price style */
+.ck-price-hot {
+    color: #E24B4A;
+    font-size: 18px;
+}
+
+/* Old price next to new price (already exists, but ensure strikethrough is visible) */
+.ck-card-hotdeal .ck-price-old {
+    font-size: 14px;
+    color: #ADB5BD;
+}
+
+/* ═══ VARIANT: Best Seller ═══ */
+.ck-card-bestseller {
+    border: 2px solid #FFB800;
+}
+
+.ck-card-bestseller:hover {
+    border-color: #FFB800;
+    box-shadow: 0 12px 32px rgba(255, 184, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .ck-card-name {
+        font-size: 13px;
+    }
+
+    .ck-price-current {
+        font-size: 14px;
+    }
+
+    .ck-card-overlay {
+        transform: translateY(0);
+    }
+}

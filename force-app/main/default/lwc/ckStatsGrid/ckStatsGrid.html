@@ -1,0 +1,12 @@
+<template>
+    <div class="ck-section">
+        <div class="ck-stats-row" data-id="stats">
+            <template for:each={stats} for:item="stat">
+                <div key={stat.id} class="ck-stat-card">
+                    <span class="ck-stat-value">{stat.display}</span>
+                    <span class="ck-stat-label">{stat.label}</span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
