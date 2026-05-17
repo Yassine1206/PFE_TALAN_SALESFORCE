@@ -1,0 +1,336 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+:host * {
+  box-sizing: border-box;
+}
+
+.ckGit-section {
+  background-color: #0a1628;
+  padding: 80px 24px;
+  width: 100%;
+  background-image: linear-gradient(
+    180deg,
+    #0a1628 0%,
+    #112240 50%,
+    #0a1628 100%
+  );
+}
+
+.ckGit-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ckGit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 0;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid #ff6b1a;
+  box-shadow:
+    0 8px 32px rgba(255, 107, 26, 0.25),
+    0 4px 16px rgba(10, 22, 40, 0.15);
+  max-width: 1100px;
+  margin: 0 auto;
+  min-height: 600px;
+}
+.ckGit-grid {
+  transition: all 0.4s ease;
+}
+
+.ckGit-grid:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 48px rgba(255, 107, 26, 0.35),
+    0 8px 24px rgba(10, 22, 40, 0.2);
+}
+
+/* ═══ LEFT : Image + Info ═══ */
+.ckGit-info-wrap {
+  position: relative;
+  background-color: #0a1628;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.ckGit-img-wrap {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ckGit-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ckGit-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 22, 40, 0.2) 0%,
+    rgba(10, 22, 40, 0.7) 100%
+  );
+  pointer-events: none;
+}
+
+.ckGit-info {
+  padding: 32px 28px;
+  flex: 1;
+  background-color: #0a1628;
+}
+
+.ckGit-info-title {
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
+}
+
+.ckGit-info-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin: 0 0 28px 0;
+}
+
+.ckGit-info-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.ckGit-info-icon {
+  width: 42px;
+  height: 42px;
+  background-color: rgba(255, 107, 26, 0.18);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ckGit-info-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #ff6b1a;
+  stroke: #ff6b1a;
+  fill: none;
+}
+
+.ckGit-info-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.ckGit-info-value {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ═══ RIGHT : Form ═══ */
+.ckGit-box {
+  padding: 48px 40px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ckGit-title {
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.ckGit-subtitle {
+  color: #495057;
+  font-size: 14px;
+  margin: 0 0 28px 0;
+  line-height: 1.6;
+}
+
+.ckGit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ckGit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ckGit-input,
+.ckGit-textarea {
+  padding: 12px 16px;
+  border: 1.5px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: #0a1628;
+  background-color: #ffffff;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.ckGit-input::placeholder,
+.ckGit-textarea::placeholder {
+  color: #868e96;
+}
+
+.ckGit-input:focus,
+.ckGit-textarea:focus {
+  outline: none;
+  border-color: #ff6b1a;
+  box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.1);
+}
+
+.ckGit-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: Arial, sans-serif;
+}
+
+.ckGit-full {
+  width: 100%;
+}
+
+select.ckGit-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.ckGit-btn {
+  background-color: #ff6b1a;
+  color: #ffffff;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.ckGit-btn:hover:not(:disabled) {
+  background-color: #ff8c42;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 26, 0.3);
+}
+
+.ckGit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ckGit-btn-secondary {
+  background-color: #ffffff;
+  color: #ff6b1a;
+  border: 1.5px solid #ff6b1a;
+}
+
+.ckGit-btn-secondary:hover {
+  background-color: rgba(255, 107, 26, 0.06);
+  transform: none;
+  box-shadow: none;
+}
+
+.ckGit-error {
+  background-color: rgba(226, 75, 74, 0.1);
+  border-left: 3px solid #e24b4a;
+  color: #e24b4a;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ═══ Success state ═══ */
+.ckGit-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.ckGit-success-icon {
+  width: 72px;
+  height: 72px;
+  background-color: rgba(29, 158, 117, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.ckGit-success-icon svg {
+  width: 36px;
+  height: 36px;
+  color: #1d9e75;
+  stroke: #1d9e75;
+  fill: none;
+}
+
+.ckGit-success .ckGit-btn {
+  margin-top: 24px;
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 900px) {
+  .ckGit-grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .ckGit-row {
+    grid-template-columns: 1fr;
+  }
+  .ckGit-img-wrap {
+    height: 200px;
+  }
+  .ckGit-info {
+    padding: 24px;
+  }
+  .ckGit-box {
+    padding: 32px 24px;
+  }
+  .ckGit-title {
+    font-size: 22px;
+  }
+}

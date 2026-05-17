@@ -1,0 +1,577 @@
+<template>
+  <div class="rq-wrapper">
+    <!-- Header -->
+    <div class="rq-header">
+      <a href="/TalFlowExpress/s/b2b-catalog" class="rq-back">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Back to Catalog
+      </a>
+      <div class="rq-header-center">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1971C2"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        <h1 class="rq-title">Request a Quote</h1>
+      </div>
+      <div style="width: 120px"></div>
+    </div>
+
+    <!-- Loading -->
+    <template if:true={isLoading}>
+      <div class="rq-loading">
+        <div class="rq-spinner"></div>
+        <p>Loading products...</p>
+      </div>
+    </template>
+
+    <template if:false={isLoading}>
+      <!-- Step Indicator -->
+      <div class="rq-steps">
+        <div class={step1Class}>
+          <span class="rq-step-num">1</span>
+          <span class="rq-step-label">Products</span>
+        </div>
+        <div class="rq-step-line"></div>
+        <div class={step2Class}>
+          <span class="rq-step-num">2</span>
+          <span class="rq-step-label">Delivery</span>
+        </div>
+        <div class="rq-step-line"></div>
+        <div class={step3Class}>
+          <span class="rq-step-num">3</span>
+          <span class="rq-step-label">Review</span>
+        </div>
+      </div>
+
+      <!-- ═══ STEP 1 : Products ═══ -->
+      <template if:true={isStep1}>
+        <div class="rq-section">
+          <div class="rq-section-header">
+            <h2 class="rq-section-title">Select Products</h2>
+            <p class="rq-section-subtitle">Minimum: 5 items and 1,000 TND</p>
+          </div>
+
+          <!-- Discount Rules Banner -->
+          <div class="rq-discount-banner">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#1971C2"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <div>
+              <span class="rq-discount-rule">
+                Order &gt; 5,000 TND → <strong>5% discount</strong>
+              </span>
+              <span class="rq-discount-sep"> | </span>
+              <span class="rq-discount-rule">
+                Order &gt; 10,000 TND → <strong>15% discount</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="rq-products-grid">
+            <template for:each={products} for:item="product">
+              <div key={product.productId} class="rq-product-card">
+                <div class="rq-product-img">
+                  <template if:true={product.imageUrl}>
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      class="rq-product-photo"
+                    />
+                  </template>
+                  <template if:false={product.imageUrl}>
+                    <div class="rq-product-placeholder">
+                      <svg
+                        width="28"
+                        height="28"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#CED4DA"
+                        stroke-width="1.5"
+                      >
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                      </svg>
+                    </div>
+                  </template>
+                </div>
+                <div class="rq-product-info">
+                  <span class="rq-product-name"> {product.name} </span>
+                  <span class="rq-product-family"> {product.family} </span>
+                  <span class="rq-product-price">
+                    {product.b2bPrice} TND / unit
+                  </span>
+                  <span class="rq-product-stock">
+                    Stock: {product.stock} units
+                  </span>
+                </div>
+                <div class="rq-product-qty">
+                  <button
+                    class="rq-qty-btn"
+                    onclick={decreaseQty}
+                    data-id={product.productId}
+                  >
+                    −
+                  </button>
+                  <span class="rq-qty-value"> {product.quantity} </span>
+                  <button
+                    class="rq-qty-btn"
+                    onclick={increaseQty}
+                    data-id={product.productId}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Cart Summary -->
+          <template if:true={hasSelectedItems}>
+            <div class="rq-cart-summary">
+              <div class="rq-cart-header">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#1971C2"
+                  stroke-width="2"
+                >
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                </svg>
+                <span>Selected Items ({totalItems})</span>
+              </div>
+              <div class="rq-cart-items">
+                <template for:each={selectedItems} for:item="item">
+                  <div key={item.productId} class="rq-cart-item">
+                    <span class="rq-cart-item-name">
+                      {item.name} × {item.quantity}
+                    </span>
+                    <span class="rq-cart-item-price">
+                      {item.lineTotal} TND
+                    </span>
+                  </div>
+                </template>
+              </div>
+              <div class="rq-cart-totals">
+                <div class="rq-cart-row">
+                  <span>Subtotal</span>
+                  <span>{subtotal} TND</span>
+                </div>
+                <template if:true={hasDiscount}>
+                  <div class="rq-cart-row rq-cart-discount">
+                    <span> Volume Discount ({discountPercent}%) </span>
+                    <span>-{discountAmount} TND</span>
+                  </div>
+                </template>
+                <div class="rq-cart-row">
+                  <span>Tax (19%)</span>
+                  <span>{taxAmount} TND</span>
+                </div>
+                <div class="rq-cart-row rq-cart-total">
+                  <span>Total TTC</span>
+                  <span>{totalTTC} TND</span>
+                </div>
+              </div>
+
+              <!-- Warnings -->
+              <template if:true={showMinAmountWarning}>
+                <div class="rq-warning">
+                  ⚠️ Minimum order: 1,000 TND (current: {subtotal} TND)
+                </div>
+              </template>
+              <template if:true={showMinItemsWarning}>
+                <div class="rq-warning">
+                  ⚠️ Minimum 5 items required (current: {totalItems})
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <template if:true={step1Error}>
+            <div class="rq-error">{step1Error}</div>
+          </template>
+
+          <div class="rq-footer">
+            <button
+              class="rq-btn-primary"
+              onclick={goToStep2}
+              disabled={isStep1Disabled}
+            >
+              Next: Delivery Info
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <!-- ═══ STEP 2 : Delivery ═══ -->
+      <template if:true={isStep2}>
+        <div class="rq-section">
+          <div class="rq-section-header">
+            <h2 class="rq-section-title">Delivery Information</h2>
+            <p class="rq-section-subtitle">Where should we deliver?</p>
+          </div>
+
+          <div class="rq-form">
+            <div class="rq-field">
+              <label class="rq-label">Street Address *</label>
+              <input
+                type="text"
+                class="rq-input"
+                placeholder="123 Business Street"
+                value={form.shippingAddress}
+                data-field="shippingAddress"
+                oninput={handleFormInput}
+              />
+            </div>
+            <div class="rq-row">
+              <div class="rq-field">
+                <label class="rq-label">City *</label>
+                <input
+                  type="text"
+                  class="rq-input"
+                  placeholder="Tunis"
+                  value={form.shippingCity}
+                  data-field="shippingCity"
+                  oninput={handleFormInput}
+                />
+              </div>
+              <div class="rq-field">
+                <label class="rq-label">Postal Code</label>
+                <input
+                  type="text"
+                  class="rq-input"
+                  placeholder="1000"
+                  value={form.shippingZip}
+                  data-field="shippingZip"
+                  oninput={handleFormInput}
+                />
+              </div>
+            </div>
+            <div class="rq-field">
+              <label class="rq-label">Country *</label>
+              <input
+                type="text"
+                class="rq-input"
+                placeholder="Tunisia"
+                value={form.shippingCountry}
+                data-field="shippingCountry"
+                oninput={handleFormInput}
+              />
+            </div>
+            <div class="rq-field">
+              <label class="rq-label"> Requested Delivery Date * </label>
+              <input
+                type="date"
+                class="rq-input"
+                value={form.deliveryDate}
+                data-field="deliveryDate"
+                min={minDeliveryDate}
+                oninput={handleFormInput}
+              />
+            </div>
+            <div class="rq-field">
+              <label class="rq-label">
+                Additional Comments / Negotiation Notes
+              </label>
+              <textarea
+                class="rq-textarea"
+                placeholder="Any special requirements, negotiation details, or questions..."
+                data-field="comments"
+                oninput={handleFormInput}
+              >
+                                {form.comments}
+                            </textarea
+              >
+            </div>
+            <!-- ═══ URGENT REQUEST ═══ -->
+            <div class="rq-urgent-section">
+              <label class="rq-urgent-checkbox">
+                <input
+                  type="checkbox"
+                  checked={form.isUrgent}
+                  onchange={handleUrgentToggle}
+                />
+                <div class="rq-urgent-label">
+                  <span class="rq-urgent-icon">🚨</span>
+                  <div>
+                    <div class="rq-urgent-title">Mark as URGENT</div>
+                    <div class="rq-urgent-subtitle">
+                      Response within 24h instead of 72h (priority handling)
+                    </div>
+                  </div>
+                </div>
+              </label>
+
+              <template if:true={showUrgencyReason}>
+                <div class="rq-field rq-urgent-reason">
+                  <label class="rq-label">Reason for urgency *</label>
+                  <textarea
+                    class="rq-textarea"
+                    placeholder="Why is this quote urgent? (e.g., project deadline, stock shortage, etc.)"
+                    value={form.urgencyReason}
+                    data-field="urgencyReason"
+                    oninput={handleFormInput}
+                    rows="2"
+                  ></textarea>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <template if:true={step2Error}>
+            <div class="rq-error">{step2Error}</div>
+          </template>
+
+          <div class="rq-footer rq-footer-two">
+            <button class="rq-btn-ghost" onclick={goToStep1}>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Back
+            </button>
+            <button class="rq-btn-primary" onclick={goToStep3}>
+              Review Quote
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <!-- ═══ STEP 3 : Review ═══ -->
+      <template if:true={isStep3}>
+        <div class="rq-section">
+          <div class="rq-section-header">
+            <h2 class="rq-section-title">Review Your Quote</h2>
+            <p class="rq-section-subtitle">Please review before submitting</p>
+          </div>
+
+          <!-- Products Review -->
+          <div class="rq-review-card">
+            <h3 class="rq-review-title">Products</h3>
+            <div class="rq-review-items">
+              <template for:each={selectedItems} for:item="item">
+                <div key={item.productId} class="rq-review-item">
+                  <span class="rq-review-item-name"> {item.name} </span>
+                  <span class="rq-review-item-qty"> × {item.quantity} </span>
+                  <span class="rq-review-item-price">
+                    {item.lineTotal} TND
+                  </span>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Pricing Review -->
+          <div class="rq-review-card">
+            <h3 class="rq-review-title">Pricing</h3>
+            <div class="rq-review-pricing">
+              <div class="rq-review-row">
+                <span>Subtotal ({totalItems} items)</span>
+                <span>{subtotal} TND</span>
+              </div>
+              <template if:true={hasDiscount}>
+                <div class="rq-review-row rq-review-discount">
+                  <span> Volume Discount ({discountPercent}%) </span>
+                  <span>-{discountAmount} TND</span>
+                </div>
+              </template>
+              <div class="rq-review-row">
+                <span>Tax (19%)</span>
+                <span>{taxAmount} TND</span>
+              </div>
+              <div class="rq-review-row rq-review-total">
+                <span>Total TTC</span>
+                <span>{totalTTC} TND</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Urgency Review -->
+          <template if:true={form.isUrgent}>
+            <div class="rq-review-card rq-review-urgent">
+              <h3 class="rq-review-title">🚨 Urgent Request</h3>
+              <p class="rq-urgent-info">
+                This quote is marked as urgent (24h response).
+              </p>
+              <template if:true={form.urgencyReason}>
+                <div class="rq-review-row">
+                  <span>Reason</span>
+                  <span>{form.urgencyReason}</span>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <!-- Delivery Review -->
+          <div class="rq-review-card">
+            <h3 class="rq-review-title">Delivery</h3>
+            <div class="rq-review-delivery">
+              <div class="rq-review-row">
+                <span>Address</span>
+                <span>{form.shippingAddress}</span>
+              </div>
+              <div class="rq-review-row">
+                <span>City</span>
+                <span> {form.shippingCity}, {form.shippingZip} </span>
+              </div>
+              <div class="rq-review-row">
+                <span>Country</span>
+                <span>{form.shippingCountry}</span>
+              </div>
+              <div class="rq-review-row">
+                <span>Requested Date</span>
+                <span>{form.deliveryDate}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comments -->
+          <template if:true={form.comments}>
+            <div class="rq-review-card">
+              <h3 class="rq-review-title">Comments</h3>
+              <p class="rq-review-comments">{form.comments}</p>
+            </div>
+          </template>
+
+          <template if:true={submitError}>
+            <div class="rq-error">{submitError}</div>
+          </template>
+
+          <div class="rq-footer rq-footer-two">
+            <button class="rq-btn-ghost" onclick={goToStep2}>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Back
+            </button>
+            <button
+              class="rq-btn-primary"
+              onclick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              <template if:true={isSubmitting}>
+                <div class="rq-spinner-sm"></div>
+                Submitting...
+              </template>
+              <template if:false={isSubmitting}>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Submit Quote Request
+              </template>
+            </button>
+          </div>
+        </div>
+      </template>
+
+      <!-- ═══ STEP 4 : Success ═══ -->
+      <template if:true={isStep4}>
+        <div class="rq-success">
+          <div class="rq-success-icon">✅</div>
+          <h2 class="rq-success-title">Quote Request Submitted!</h2>
+          <p class="rq-success-message">
+            Your quote request has been received.<br />
+            Our sales team will review it and send you a formal quote within
+            24-48 hours.
+          </p>
+          <div class="rq-success-detail">
+            <span class="rq-success-label">Quote Reference</span>
+            <span class="rq-success-value">{quoteResult.quoteName}</span>
+          </div>
+          <div class="rq-success-detail">
+            <span class="rq-success-label">Total Amount</span>
+            <span class="rq-success-value"> {quoteResult.totalTTC} TND </span>
+          </div>
+          <template if:true={quoteResult.discountPercent}>
+            <div class="rq-success-detail rq-success-discount">
+              <span class="rq-success-label"> Volume Discount Applied </span>
+              <span class="rq-success-value">
+                {quoteResult.discountPercent}% (-{quoteResult.discountAmount}
+                TND)
+              </span>
+            </div>
+          </template>
+          <div class="rq-success-actions">
+            <a href="/TalFlowExpress/s/my-quotes" class="rq-btn-primary">
+              View My Quotes
+            </a>
+            <a href="/TalFlowExpress/s/b2b-catalog" class="rq-btn-ghost">
+              Back to Catalog
+            </a>
+          </div>
+        </div>
+      </template>
+    </template>
+  </div>
+</template>

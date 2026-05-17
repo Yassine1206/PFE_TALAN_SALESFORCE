@@ -1,0 +1,359 @@
+<template>
+  <div class="invoices-wrapper">
+    <!-- Header -->
+    <div class="invoices-header">
+      <div class="header-left">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FF6B1A"
+          stroke-width="2"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        <div>
+          <h1 class="invoices-title">My Invoices</h1>
+          <p class="invoices-subtitle">
+            View and download all your B2B invoices
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-orange">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.totalInvoices}</div>
+          <div class="stat-label">Total Invoices</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-green">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.totalPaidFormatted}</div>
+          <div class="stat-label">Total Paid</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-amber">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.unpaidAmountFormatted}</div>
+          <div class="stat-label">Unpaid</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-red">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.overdueCount}</div>
+          <div class="stat-label">Overdue</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="filters">
+        <button
+          class={filterAllClass}
+          data-filter="all"
+          onclick={handleFilterClick}
+        >
+          All
+        </button>
+        <button
+          class={filterPaidClass}
+          data-filter="paid"
+          onclick={handleFilterClick}
+        >
+          Paid
+        </button>
+        <button
+          class={filterUnpaidClass}
+          data-filter="unpaid"
+          onclick={handleFilterClick}
+        >
+          Unpaid
+        </button>
+        <button
+          class={filterOverdueClass}
+          data-filter="overdue"
+          onclick={handleFilterClick}
+        >
+          Overdue
+        </button>
+        <button
+          class={filterDraftClass}
+          data-filter="draft"
+          onclick={handleFilterClick}
+        >
+          Draft
+        </button>
+      </div>
+
+      <div class="search-box">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search by invoice or order #..."
+          value={searchTerm}
+          oninput={handleSearchChange}
+        />
+      </div>
+    </div>
+
+    <template if:true={isLoading}>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading invoices...</p>
+      </div>
+    </template>
+
+    <template if:true={errorMessage}>
+      <div class="error-state">{errorMessage}</div>
+    </template>
+
+    <template if:true={isEmpty}>
+      <div class="empty-state">
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#CED4DA"
+          stroke-width="1.5"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <h3>No invoices yet</h3>
+        <p>Complete an order to receive your first invoice</p>
+      </div>
+    </template>
+
+    <template if:true={hasInvoices}>
+      <div class="results-count">{filteredCount} invoices found</div>
+
+      <div class="invoices-table">
+        <div class="table-header">
+          <div class="col-invoice">Invoice #</div>
+          <div class="col-order">Order</div>
+          <div class="col-date">Date</div>
+          <div class="col-due">Due Date</div>
+          <div class="col-amount">Amount</div>
+          <div class="col-status">Status</div>
+          <div class="col-actions">Actions</div>
+        </div>
+
+        <template for:each={filteredInvoices} for:item="inv">
+          <div
+            key={inv.invoiceId}
+            class="table-row"
+            data-id={inv.invoiceId}
+            onclick={handleRowClick}
+          >
+            <div class="col-invoice">
+              <strong>{inv.invoiceNumber}</strong>
+            </div>
+            <div class="col-order">{inv.orderNumber}</div>
+            <div class="col-date">{inv.invoiceDate}</div>
+            <div class="col-due">{inv.dueDate}</div>
+            <div class="col-amount">{inv.totalFormatted}</div>
+            <div class="col-status">
+              <span class={inv.displayClass}>{inv.displayStatus}</span>
+            </div>
+            <div class="col-actions">
+              <button
+                class="btn-download"
+                data-orderid={inv.orderId}
+                onclick={handleDownloadInvoice}
+                title="Download PDF"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- Detail Modal -->
+    <template if:true={isDetailOpen}>
+      <div class="modal-backdrop" onclick={handleCloseDetail}></div>
+      <div class="modal">
+        <template if:true={isLoadingDetail}>
+          <div class="loading-state">
+            <div class="spinner"></div>
+          </div>
+        </template>
+
+        <template if:false={isLoadingDetail}>
+          <template if:true={selectedInvoice}>
+            <div class="modal-header">
+              <div>
+                <h2>Invoice {selectedInvoice.invoiceNumber}</h2>
+                <p>Issued: {selectedInvoice.invoiceDate}</p>
+              </div>
+              <button class="modal-close" onclick={handleCloseDetail}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <div class="detail-section">
+                <h3 class="section-title">Invoice Information</h3>
+                <div class="detail-row">
+                  <span class="detail-label">Status</span>
+                  <span class="detail-value">{selectedInvoice.status}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Order #</span>
+                  <span class="detail-value"
+                    >{selectedInvoice.orderNumber}</span
+                  >
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Issue Date</span>
+                  <span class="detail-value"
+                    >{selectedInvoice.invoiceDate}</span
+                  >
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Due Date (Net 30)</span>
+                  <span class="detail-value">{selectedInvoice.dueDate}</span>
+                </div>
+                <template if:true={selectedInvoice.paymentMethod}>
+                  <div class="detail-row">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value"
+                      >{selectedInvoice.paymentMethod}</span
+                    >
+                  </div>
+                </template>
+                <template if:true={selectedInvoice.accountName}>
+                  <div class="detail-row">
+                    <span class="detail-label">Billed To</span>
+                    <span class="detail-value"
+                      >{selectedInvoice.accountName}</span
+                    >
+                  </div>
+                </template>
+              </div>
+
+              <div class="detail-section totals-section">
+                <h3 class="section-title">Amount Breakdown</h3>
+                <div class="totals-row">
+                  <span>Subtotal</span>
+                  <span>{selectedInvoice.subtotalFormatted}</span>
+                </div>
+                <template if:true={selectedInvoice.hasDiscount}>
+                  <div class="totals-row discount">
+                    <span>Discount</span>
+                    <span>-{selectedInvoice.discountFormatted}</span>
+                  </div>
+                </template>
+                <div class="totals-row">
+                  <span>Shipping</span>
+                  <span>{selectedInvoice.shippingFormatted}</span>
+                </div>
+                <div class="totals-row">
+                  <span>Tax ({selectedInvoice.taxRate}%)</span>
+                  <span>{selectedInvoice.taxFormatted}</span>
+                </div>
+                <div class="totals-row grand-total">
+                  <span>Total TTC</span>
+                  <span>{selectedInvoice.totalFormatted}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn-secondary" onclick={handleCloseDetail}>
+                Close
+              </button>
+              <button class="btn-primary" onclick={handleDownloadFromModal}>
+                📥 Download PDF
+              </button>
+            </div>
+          </template>
+        </template>
+      </div>
+    </template>
+  </div>
+</template>

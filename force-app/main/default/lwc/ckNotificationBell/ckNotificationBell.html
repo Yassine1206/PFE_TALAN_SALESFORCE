@@ -1,0 +1,74 @@
+<template>
+  <div class="notif-container">
+    <!-- Bell Icon Button -->
+    <button class="bell-button" onclick={toggleDropdown} title="Notifications">
+      <svg class="bell-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+        />
+      </svg>
+      <template if:true={hasUnread}>
+        <span class="badge">{displayCount}</span>
+      </template>
+    </button>
+
+    <!-- Dropdown -->
+    <div class={dropdownClass} onclick={stopProp}>
+      <!-- Header -->
+      <div class="dropdown-header">
+        <span class="dropdown-title">Notifications</span>
+        <template if:true={hasUnread}>
+          <button class="mark-all-btn" onclick={handleMarkAllRead}>
+            Mark all read
+          </button>
+        </template>
+      </div>
+
+      <!-- Notifications list -->
+      <div class="dropdown-body">
+        <template if:true={hasNotifications}>
+          <template for:each={notifications} for:item="notif">
+            <div
+              key={notif.Id}
+              class={notif.rowClass}
+              data-id={notif.Id}
+              data-url={notif.Action_URL__c}
+              onclick={handleNotificationClick}
+            >
+              <!-- Icon -->
+              <div class={notif.typeClass}>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d={notif.typeIcon} />
+                </svg>
+              </div>
+
+              <!-- Content -->
+              <div class="notif-content">
+                <div class="notif-title">{notif.Title__c}</div>
+                <div class="notif-message">{notif.Message__c}</div>
+                <div class="notif-time">{notif.relativeTime}</div>
+              </div>
+
+              <!-- Unread dot -->
+              <template if:false={notif.Is_Read__c}>
+                <div class="unread-dot"></div>
+              </template>
+            </div>
+          </template>
+        </template>
+
+        <template if:false={hasNotifications}>
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+              />
+            </svg>
+            <p>No notifications yet</p>
+            <span>You're all caught up!</span>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>

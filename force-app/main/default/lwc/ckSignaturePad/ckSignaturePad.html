@@ -1,0 +1,99 @@
+<template>
+  <template lwc:if={isOpen}>
+    <div class="ck-modal-backdrop" onclick={close}></div>
+
+    <div class="ck-modal">
+      <div class="ck-modal-header">
+        <div>
+          <h2 class="ck-modal-title">Sign Contract</h2>
+          <p class="ck-modal-subtitle">Contract C-{contractNumber}</p>
+        </div>
+        <button class="ck-close-btn" onclick={close}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="ck-modal-body">
+        <p class="ck-instructions">
+          Please draw your signature below and enter your full name to confirm.
+        </p>
+
+        <!-- Name input -->
+        <div class="ck-field">
+          <label class="ck-label">Full Name</label>
+          <input
+            type="text"
+            class="ck-input"
+            placeholder="Your full legal name"
+            value={signerName}
+            onchange={handleNameChange}
+            oninput={handleNameChange}
+          />
+        </div>
+
+        <!-- Signature canvas -->
+        <div class="ck-field">
+          <label class="ck-label">Signature</label>
+          <div class="ck-canvas-wrapper">
+            <canvas class="ck-canvas"></canvas>
+            <template lwc:if={hasDrawn}>
+              <button class="ck-clear-btn" onclick={handleClear}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="1 4 1 10 7 10" />
+                  <path d="M3.51 15a9 9 0 102.13-9.36L1 10" />
+                </svg>
+                Clear
+              </button>
+            </template>
+          </div>
+          <p class="ck-hint">Use your mouse or finger to draw your signature</p>
+        </div>
+
+        <!-- Legal notice -->
+        <div class="ck-legal">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <p>
+            By signing, you agree this electronic signature has the same legal
+            validity as a handwritten signature.
+          </p>
+        </div>
+      </div>
+
+      <div class="ck-modal-footer">
+        <button class="ck-btn-secondary" onclick={close} disabled={isLoading}>
+          Cancel
+        </button>
+        <button
+          class="ck-btn-primary"
+          onclick={handleSign}
+          disabled={isSignDisabled}
+        >
+          <template lwc:if={isLoading}>
+            <div class="ck-spinner"></div>
+          </template>
+          {signButtonLabel}
+        </button>
+      </div>
+    </div>
+  </template>
+</template>

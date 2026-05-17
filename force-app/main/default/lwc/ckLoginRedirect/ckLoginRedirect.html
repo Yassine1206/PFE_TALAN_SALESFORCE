@@ -1,0 +1,16 @@
+<template>
+  <!-- Visible only during B2B redirect — invisible otherwise -->
+  <template lwc:if={isLoading}>
+    <div class="ck-redirect-overlay">
+      <div class="ck-redirect-card">
+        <div class="ck-spinner-wrap">
+          <div class="ck-spinner"></div>
+        </div>
+        <div class="ck-redirect-text">
+          <h3 class="ck-redirect-title">Welcome back</h3>
+          <p class="ck-redirect-subtitle">Loading your B2B workspace...</p>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

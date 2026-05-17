@@ -1,0 +1,44 @@
+<template>
+  <template if:true={hero}>
+    <section class="ck-hero">
+      <div class="ck-hero-bg">
+        <img src={hero.Background_Image_URL__c} alt="" />
+        <div class="ck-hero-gradient"></div>
+      </div>
+
+      <div class="ck-hero-content">
+        <template if:true={hero.Badge_Text__c}>
+          <div class="ck-hero-badge">
+            <span class="ck-hero-badge-dot"></span>
+            {hero.Badge_Text__c}
+          </div>
+        </template>
+
+        <h1 class="ck-hero-title">{hero.Title__c}</h1>
+
+        <template if:true={hero.Subtitle__c}>
+          <p class="ck-hero-subtitle">{hero.Subtitle__c}</p>
+        </template>
+
+        <div class="ck-hero-actions">
+          <template if:true={hero.Primary_Button_Label__c}>
+            <a href={hero.Primary_Button_URL__c} class="ck-btn ck-btn-primary">
+              {hero.Primary_Button_Label__c}
+            </a>
+          </template>
+          <template if:true={hero.Secondary_Button_Label__c}>
+            <a href={hero.Secondary_Button_URL__c} class="ck-btn ck-btn-ghost">
+              {hero.Secondary_Button_Label__c}
+            </a>
+          </template>
+        </div>
+      </div>
+    </section>
+  </template>
+
+  <template if:true={isLoading}>
+    <template if:false={hero}>
+      <div class="ck-hero ck-hero-skeleton"></div>
+    </template>
+  </template>
+</template>

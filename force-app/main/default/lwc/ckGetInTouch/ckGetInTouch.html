@@ -1,0 +1,202 @@
+<template>
+  <div class="ckGit-section">
+    <div class="ckGit-grid">
+      <!-- Left : Image + Info -->
+      <div class="ckGit-info-wrap">
+        <div class="ckGit-img-wrap">
+          <img
+            src="https://images.pexels.com/photos/7709286/pexels-photo-7709286.jpeg"
+            alt="Contact"
+          />
+          <div class="ckGit-img-overlay"></div>
+        </div>
+
+        <div class="ckGit-info">
+          <h3 class="ckGit-info-title">Contact Information</h3>
+          <p class="ckGit-info-subtitle">
+            Reach us through any of these channels
+          </p>
+
+          <div class="ckGit-info-item">
+            <div class="ckGit-info-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="ckGit-info-label">Phone</div>
+              <div class="ckGit-info-value">+216 71 234 567</div>
+            </div>
+          </div>
+
+          <div class="ckGit-info-item">
+            <div class="ckGit-info-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <div>
+              <div class="ckGit-info-label">Email</div>
+              <div class="ckGit-info-value">support@talflow.com</div>
+            </div>
+          </div>
+
+          <div class="ckGit-info-item">
+            <div class="ckGit-info-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div>
+              <div class="ckGit-info-label">Office</div>
+              <div class="ckGit-info-value">Tunis, Tunisia</div>
+            </div>
+          </div>
+
+          <div class="ckGit-info-item">
+            <div class="ckGit-info-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div>
+              <div class="ckGit-info-label">Hours</div>
+              <div class="ckGit-info-value">Mon-Fri: 9AM - 6PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right : Form -->
+      <div class="ckGit-box">
+        <template if:false={showThankYou}>
+          <h2 class="ckGit-title">Get in Touch</h2>
+          <p class="ckGit-subtitle">
+            Have a question or need help? Drop us a message and we'll get back
+            to you within 24 hours.
+          </p>
+
+          <div class="ckGit-form">
+            <template if:true={isGuestUser}>
+              <div class="ckGit-row">
+                <input
+                  type="text"
+                  class="ckGit-input"
+                  placeholder="First Name *"
+                  data-field="firstName"
+                  value={firstName}
+                  oninput={handleInput}
+                />
+                <input
+                  type="text"
+                  class="ckGit-input"
+                  placeholder="Last Name *"
+                  data-field="lastName"
+                  value={lastName}
+                  oninput={handleInput}
+                />
+              </div>
+              <input
+                type="email"
+                class="ckGit-input ckGit-full"
+                placeholder="Email Address *"
+                data-field="email"
+                value={email}
+                oninput={handleInput}
+              />
+              <input
+                type="tel"
+                class="ckGit-input ckGit-full"
+                placeholder="Phone (optional)"
+                data-field="phone"
+                value={phone}
+                oninput={handleInput}
+              />
+            </template>
+
+            <select
+              class="ckGit-input ckGit-full"
+              onchange={handleSubjectChange}
+              value={subject}
+            >
+              <template for:each={subjectOptions} for:item="opt">
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              </template>
+            </select>
+
+            <textarea
+              class="ckGit-textarea"
+              placeholder="Your message *"
+              rows="4"
+              data-field="message"
+              value={message}
+              oninput={handleInput}
+            ></textarea>
+
+            <template if:true={errorMessage}>
+              <div class="ckGit-error">{errorMessage}</div>
+            </template>
+
+            <button
+              class="ckGit-btn"
+              onclick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {submitButtonLabel}
+            </button>
+          </div>
+        </template>
+
+        <template if:true={showThankYou}>
+          <div class="ckGit-success">
+            <div class="ckGit-success-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <h2 class="ckGit-title">Message Sent!</h2>
+            <p class="ckGit-subtitle">{successMessage}</p>
+            <button
+              class="ckGit-btn ckGit-btn-secondary"
+              onclick={handleNewMessage}
+            >
+              Send Another Message
+            </button>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>

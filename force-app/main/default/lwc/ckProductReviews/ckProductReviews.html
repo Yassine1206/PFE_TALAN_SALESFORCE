@@ -1,0 +1,108 @@
+<template>
+  <div class="rev-wrap">
+    <template lwc:if={isLoading}>
+      <div class="rev-loading">Loading reviews...</div>
+    </template>
+
+    <template lwc:if={summary}>
+      <!-- ═══ Summary Header ═══ -->
+      <div class="rev-summary">
+        <div class="rev-summary-main">
+          <div class="rev-avg-number">{averageRatingFormatted}</div>
+          <div class="rev-avg-stars">
+            <template for:each={averageStarsArray} for:item="star">
+              <span key={star.id} class={star.cssClass}>★</span>
+            </template>
+          </div>
+          <div class="rev-count-text">{reviewCountText}</div>
+        </div>
+
+        <template lwc:if={showRecommended}>
+          <div class="rev-recommended">
+            <span class="rev-recommended-icon">💚</span>
+            <span class="rev-recommended-text">
+              <strong>{summary.recommendedPercent}%</strong> would recommend
+            </span>
+          </div>
+        </template>
+      </div>
+
+      <!-- ═══ Rating Breakdown ═══ -->
+      <template lwc:if={hasReviews}>
+        <div class="rev-breakdown">
+          <template for:each={summary.breakdown} for:item="rb">
+            <div key={rb.stars} class="rev-bar-row">
+              <span class="rev-bar-label">{rb.stars}★</span>
+              <div class="rev-bar-track">
+                <div class="rev-bar-fill"></div>
+              </div>
+              <span class="rev-bar-count">{rb.count}</span>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- ═══ Write Review Button ═══ -->
+      <div class="rev-write-section">
+        <template lwc:if={summary.canWriteReview}>
+          <button class="rev-write-btn" onclick={handleOpenWriteModal}>
+            ✍️ Write a Review
+          </button>
+        </template>
+        <template lwc:if={summary.cannotReviewReason}>
+          <p class="rev-cant-write">{summary.cannotReviewReason}</p>
+        </template>
+      </div>
+
+      <!-- ═══ Reviews List ═══ -->
+      <template lwc:if={hasReviews}>
+        <div class="rev-list">
+          <h3 class="rev-list-title">Customer Reviews</h3>
+          <template for:each={reviewsWithComputedFields} for:item="r">
+            <article key={r.id} class="rev-card">
+              <div class="rev-card-header">
+                <div>
+                  <div class="rev-card-stars">
+                    <template for:each={r.starsComputed} for:item="s">
+                      <span key={s.key} class={s.cssClass}>★</span>
+                    </template>
+                  </div>
+                  <h4 class="rev-card-title">{r.title}</h4>
+                </div>
+                <div class="rev-card-meta">
+                  <span class={r.badgeClass}>{r.customerType}</span>
+                </div>
+              </div>
+              <p class="rev-card-comment">{r.comment}</p>
+              <div class="rev-card-footer">
+                <span class="rev-card-author">{r.customerName}</span>
+                <span class="rev-card-date">{r.createdDateFormatted}</span>
+                <template lwc:if={r.isRecommended}>
+                  <span class="rev-card-recommend">💚 Recommends</span>
+                </template>
+              </div>
+            </article>
+          </template>
+        </div>
+      </template>
+
+      <!-- ═══ Empty State ═══ -->
+      <template lwc:if={hasNoReviews}>
+        <div class="rev-empty">
+          <p>No reviews yet. Be the first to review this product!</p>
+        </div>
+      </template>
+    </template>
+
+    <!-- ═══ Write Review Modal ═══ -->
+    <template lwc:if={showWriteModal}>
+      <c-ck-write-product-review
+        product-id={productId}
+        product-name={productName}
+        onsubmitted={handleReviewSubmitted}
+        onclose={handleCloseModal}
+      >
+      </c-ck-write-product-review>
+    </template>
+  </div>
+</template>

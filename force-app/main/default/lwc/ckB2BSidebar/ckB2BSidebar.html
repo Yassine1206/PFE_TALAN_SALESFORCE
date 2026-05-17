@@ -1,0 +1,322 @@
+<template>
+  <aside class="ck-sidebar">
+    <!-- ═══════════ HEADER : Brand + User ═══════════ -->
+    <div class="ck-sidebar-header">
+      <!-- Brand -->
+      <div class="ck-brand">
+        <div class="ck-brand-logo">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 3h18v4H3z" />
+            <path d="M3 11h18v10H3z" />
+            <path d="M9 15h6" />
+          </svg>
+        </div>
+        <span class="ck-brand-name">TalFlow</span>
+        <span class="ck-brand-tag">B2B</span>
+      </div>
+
+      <!-- User identity -->
+      <div class="ck-user">
+        <template lwc:if={hasProfilePhoto}>
+          <img src={profilePhotoUrl} alt="Profile" class="ck-user-avatar" />
+        </template>
+        <template lwc:else>
+          <div class="ck-user-avatar ck-user-avatar-initials">{initials}</div>
+        </template>
+        <div class="ck-user-info">
+          <div class="ck-user-name">{fullName}</div>
+          <div class="ck-user-account">{accountNameDisplay}</div>
+          <div class="ck-user-email">{email}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ NAVIGATION ═══════════ -->
+    <nav class="ck-nav">
+      <!-- Workspace section -->
+      <div class="ck-nav-section-label">Workspace</div>
+
+      <a href="/TalFlowExpress/s/b2b-dashboard" class={dashboardClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="7" height="9" />
+          <rect x="14" y="3" width="7" height="5" />
+          <rect x="14" y="12" width="7" height="9" />
+          <rect x="3" y="16" width="7" height="5" />
+        </svg>
+        <span class="ck-nav-label">Dashboard</span>
+      </a>
+
+      <a href="/TalFlowExpress/s/b2b-catalog" class={catalogClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="ck-nav-label">Catalog</span>
+      </a>
+      <a href="/TalFlowExpress/s/my-orders-b2b" class={ordersClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path
+            d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+          ></path>
+        </svg>
+        <span class="ck-nav-label">My Orders</span>
+      </a>
+      <a href="/TalFlowExpress/s/my-invoices" class={invoicesClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        <span class="ck-nav-label">My Invoices</span>
+      </a>
+      <a href="/TalFlowExpress/s/my-quotes" class={quotesClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        <span class="ck-nav-label">My Quotes</span>
+        <template lwc:if={hasPendingQuotes}>
+          <span class="ck-nav-badge">{pendingQuotesCount}</span>
+        </template>
+      </a>
+
+      <a href="/TalFlowExpress/s/my-contracts" class={contractsClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+        </svg>
+        <span class="ck-nav-label">My Contracts</span>
+      </a>
+
+      <!-- Account section -->
+      <div class="ck-nav-section-label ck-nav-section-second">Account</div>
+
+      <!-- ═══════════ NOTIFICATIONS BELL ═══════════ -->
+      <div class="ck-notif-wrapper">
+        <a
+          href="javascript:void(0)"
+          class="ck-nav-link ck-notif-trigger"
+          onclick={toggleNotifications}
+        >
+          <svg
+            class="ck-nav-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 01-3.46 0" />
+          </svg>
+          <span class="ck-nav-label">Notifications</span>
+          <template lwc:if={hasUnreadNotifs}>
+            <span class="ck-notif-badge">{displayUnreadCount}</span>
+          </template>
+        </a>
+
+        <!-- Dropdown -->
+        <div class={notifDropdownClass}>
+          <!-- Dropdown header -->
+          <div class="ck-notif-dropdown-header">
+            <span class="ck-notif-dropdown-title">Notifications</span>
+            <template lwc:if={hasUnreadNotifs}>
+              <button class="ck-mark-all-btn" onclick={handleMarkAllRead}>
+                Mark all read
+              </button>
+            </template>
+          </div>
+
+          <!-- Dropdown body -->
+          <div class="ck-notif-dropdown-body">
+            <template lwc:if={hasNotifications}>
+              <template for:each={notifications} for:item="notif">
+                <div
+                  key={notif.Id}
+                  class={notif.rowClass}
+                  data-id={notif.Id}
+                  data-url={notif.Action_URL__c}
+                  onclick={handleNotificationClick}
+                >
+                  <div class={notif.typeClass}>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d={notif.typeIcon}></path>
+                    </svg>
+                  </div>
+                  <div class="ck-notif-content">
+                    <div class="ck-notif-title">{notif.Title__c}</div>
+                    <div class="ck-notif-message">{notif.Message__c}</div>
+                    <div class="ck-notif-time">{notif.relativeTime}</div>
+                  </div>
+                  <template lwc:if={notif.isUnread}>
+                    <div class="ck-notif-unread-dot"></div>
+                  </template>
+                </div>
+              </template>
+            </template>
+
+            <template lwc:else>
+              <div class="ck-notif-empty">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9z M13.73 21a2 2 0 01-3.46 0"
+                  />
+                </svg>
+                <p>No notifications yet</p>
+                <span>You're all caught up!</span>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <!-- ═══════════ END NOTIFICATIONS ═══════════ -->
+
+      <a href="/TalFlowExpress/s/edit-profile" class={profileClass}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span class="ck-nav-label">Edit Profile</span>
+      </a>
+
+      <!-- AJOUTE ce bloc dans la sidebar, après le profil user -->
+      <div class="ck-sidebar-theme">
+        <button
+          class={themeToggleClass}
+          onclick={handleToggleTheme}
+          title="Toggle theme"
+        >
+          <div class="ck-theme-icons">
+            <svg
+              class="ck-theme-icon-sun"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg
+              class="ck-theme-icon-moon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <span class="ck-theme-label">{themeIconLabel}</span>
+          <div class="ck-theme-switch">
+            <div class="ck-theme-switch-handle"></div>
+          </div>
+        </button>
+      </div>
+
+      <a href="#" class="ck-nav-link ck-nav-signout" onclick={handleSignOut}>
+        <svg
+          class="ck-nav-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
+        </svg>
+        <span class="ck-nav-label">Sign Out</span>
+      </a>
+    </nav>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <div class="ck-sidebar-footer">
+      <div class="ck-status-dot"></div>
+      <span class="ck-status-text">Online · v1.0</span>
+    </div>
+  </aside>
+</template>

@@ -1,0 +1,63 @@
+.ck-redirect-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  font-family: Arial, sans-serif;
+}
+
+.ck-redirect-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 56px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  min-width: 320px;
+}
+
+.ck-spinner-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ck-spinner {
+  width: 56px;
+  height: 56px;
+  border: 4px solid #fff8f5;
+  border-top-color: #ff6b1a;
+  border-radius: 50%;
+  animation: ck-spin 0.9s linear infinite;
+}
+
+@keyframes ck-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ck-redirect-text {
+  text-align: center;
+}
+
+.ck-redirect-title {
+  margin: 0 0 6px 0;
+  color: #0a1628;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.ck-redirect-subtitle {
+  margin: 0;
+  color: #868e96;
+  font-size: 14px;
+  font-weight: 400;
+}

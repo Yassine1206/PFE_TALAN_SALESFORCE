@@ -1,0 +1,258 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.rev-wrap {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 24px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.rev-loading {
+  text-align: center;
+  color: #868e96;
+  padding: 40px;
+  font-style: italic;
+}
+
+/* ═══ Summary ═══ */
+.rev-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1.5px solid #f1f3f5;
+  margin-bottom: 24px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.rev-summary-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rev-avg-number {
+  font-size: 48px;
+  font-weight: 800;
+  color: #ff6b1a;
+  line-height: 1;
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
+.rev-avg-stars {
+  display: flex;
+  gap: 2px;
+  font-size: 20px;
+}
+
+.rev-star {
+  color: #dee2e6;
+}
+
+.rev-star-filled {
+  color: #ffb800;
+}
+
+.rev-count-text {
+  color: #868e96;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.rev-recommended {
+  background: rgba(29, 158, 117, 0.08);
+  border: 1.5px solid rgba(29, 158, 117, 0.2);
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rev-recommended-icon {
+  font-size: 22px;
+}
+
+.rev-recommended-text {
+  color: #0a1628;
+  font-size: 13px;
+}
+
+.rev-recommended-text strong {
+  color: #1d9e75;
+  font-size: 15px;
+}
+
+/* ═══ Breakdown ═══ */
+.rev-breakdown {
+  margin-bottom: 24px;
+}
+
+.rev-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.rev-bar-label {
+  font-size: 12px;
+  color: #495057;
+  width: 28px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.rev-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #f1f3f5;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.rev-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffb800, #ff6b1a);
+  border-radius: 999px;
+  transition: width 0.4s;
+}
+
+.rev-bar-count {
+  font-size: 12px;
+  color: #868e96;
+  width: 28px;
+}
+
+/* ═══ Write Button ═══ */
+.rev-write-section {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1.5px solid #f1f3f5;
+}
+
+.rev-write-btn {
+  background: #ff6b1a;
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: Arial, sans-serif;
+}
+
+.rev-write-btn:hover {
+  background: #ff8c42;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 107, 26, 0.3);
+}
+
+.rev-cant-write {
+  color: #868e96;
+  font-size: 13px;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ═══ Reviews List ═══ */
+.rev-list-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0a1628;
+  margin: 0 0 20px;
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
+.rev-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 14px;
+  border: 1px solid #f1f3f5;
+}
+
+.rev-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.rev-card-stars {
+  display: flex;
+  gap: 1px;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.rev-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0a1628;
+  margin: 0;
+}
+
+.rev-card-comment {
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.rev-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rev-card-author {
+  color: #0a1628;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rev-card-date {
+  color: #868e96;
+  font-size: 12px;
+}
+
+.rev-card-recommend {
+  color: #1d9e75;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rev-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rev-badge-b2b {
+  background: rgba(255, 107, 26, 0.1);
+  color: #ff6b1a;
+}
+
+.rev-badge-b2c {
+  background: rgba(10, 22, 40, 0.06);
+  color: #0a1628;
+}
+
+.rev-empty {
+  text-align: center;
+  color: #868e96;
+  padding: 40px;
+  font-style: italic;
+}

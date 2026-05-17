@@ -1,0 +1,492 @@
+<template>
+  <!-- ═══════════ LOADING ═══════════ -->
+  <template lwc:if={isLoading}>
+    <div class="ck-loading">
+      <div class="ck-spinner"></div>
+      <p class="ck-loading-text">Loading B2B catalog...</p>
+    </div>
+  </template>
+
+  <!-- ═══════════ ERROR ═══════════ -->
+  <template lwc:if={hasError}>
+    <div class="ck-error">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </svg>
+      <p>Unable to load catalog. Please refresh the page.</p>
+    </div>
+  </template>
+
+  <!-- ═══════════ MAIN CATALOG ═══════════ -->
+  <div class="ck-catalog-wrap">
+    <!-- ─── HEADER ─── -->
+    <header class="ck-cat-header">
+      <div class="ck-cat-title-row">
+        <div class="ck-cat-title-block">
+          <div class="ck-cat-badge">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            <span>B2B Catalog</span>
+          </div>
+          <h1 class="ck-cat-title">Business Catalog</h1>
+          <p class="ck-cat-subtitle">
+            Negotiated B2B pricing • Volume discounts available
+          </p>
+        </div>
+        <div class="ck-cat-stats">
+          <div class="ck-cat-stat-box">
+            <span class="ck-cat-stat-value">{productCount}</span>
+            <span class="ck-cat-stat-label">Products</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volume discounts banner -->
+      <div class="ck-volume-banner">
+        <div class="ck-volume-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        </div>
+        <div class="ck-volume-text">
+          <strong>Volume Discounts</strong>
+          <span
+            >Order 5K+ → 5% OFF · 10K+ → 15% OFF · Custom pricing available on
+            request</span
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── FILTERS ─── -->
+    <section class="ck-filters">
+      <div class="ck-filters-row">
+        <!-- Search -->
+        <div class="ck-filter-search">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            class="ck-filter-input"
+            placeholder="Search products..."
+            data-id="search-input"
+            oninput={handleSearchInput}
+          />
+        </div>
+
+        <!-- Category -->
+        <select
+          class="ck-filter-select"
+          data-id="category-select"
+          onchange={handleCategoryChange}
+        >
+          <template for:each={categoryOptions} for:item="opt">
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          </template>
+        </select>
+
+        <!-- Price min/max -->
+        <div class="ck-price-range">
+          <input
+            type="number"
+            class="ck-filter-input ck-price-input"
+            placeholder="Min $"
+            data-id="min-price"
+            oninput={handleMinPriceChange}
+          />
+          <span class="ck-price-sep">–</span>
+          <input
+            type="number"
+            class="ck-filter-input ck-price-input"
+            placeholder="Max $"
+            data-id="max-price"
+            oninput={handleMaxPriceChange}
+          />
+        </div>
+
+        <!-- Reset -->
+        <button class="ck-filter-reset" onclick={handleResetFilters}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+          </svg>
+          Reset
+        </button>
+      </div>
+
+      <!-- Toggle chips -->
+      <div class="ck-filter-chips">
+        <label class="ck-chip">
+          <input
+            type="checkbox"
+            data-id="in-stock"
+            onchange={handleInStockToggle}
+          />
+          <span class="ck-chip-content">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+              />
+            </svg>
+            In Stock Only
+          </span>
+        </label>
+
+        <label class="ck-chip">
+          <input
+            type="checkbox"
+            data-id="on-sale"
+            onchange={handleOnSaleToggle}
+          />
+          <span class="ck-chip-content">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"
+              />
+              <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+            On Sale
+          </span>
+        </label>
+
+        <label class="ck-chip">
+          <input
+            type="checkbox"
+            data-id="top-rated"
+            onchange={handleTopRatedToggle}
+          />
+          <span class="ck-chip-content">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+              />
+            </svg>
+            Top Rated
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ─── EMPTY STATE ─── -->
+    <template lwc:if={showEmptyState}>
+      <div class="ck-empty">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <line x1="8" y1="11" x2="14" y2="11" />
+        </svg>
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or reset the search.</p>
+        <button class="ck-empty-btn" onclick={handleResetFilters}>
+          Reset Filters
+        </button>
+      </div>
+    </template>
+
+    <!-- ─── PRODUCT GRID ─── -->
+    <template lwc:if={showCatalog}>
+      <section class="ck-products-grid">
+        <template for:each={displayProducts} for:item="product">
+          <article key={product.productId} class={product.cardClass}>
+            <!-- Image + badges -->
+            <div class="ck-card-image-wrap">
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                class="ck-card-image"
+                loading="lazy"
+              />
+
+              <div class="ck-card-badges">
+                <template lwc:if={product.isOnSale}>
+                  <span class="ck-badge ck-badge-sale">SALE</span>
+                </template>
+                <template lwc:if={product.isTopRated}>
+                  <span class="ck-badge ck-badge-top"
+                    >⭐ {product.ratingDisplay}</span
+                  >
+                </template>
+              </div>
+
+              <span class={product.stockClass}>{product.stockLabel}</span>
+            </div>
+
+            <!-- Body -->
+            <div class="ck-card-body">
+              <span class="ck-card-category">{product.categoryName}</span>
+              <h3 class="ck-card-name">{product.name}</h3>
+
+              <div class="ck-card-pricing">
+                <div class="ck-price-main">
+                  <span class="ck-b2b-label">B2B Price</span>
+                  <span class="ck-b2b-price">{product.b2bPriceFormatted}</span>
+                </div>
+                <template lwc:if={product.retailPriceFormatted}>
+                  <div class="ck-price-retail">
+                    <span class="ck-retail-label">Retail:</span>
+                    <span class="ck-retail-price"
+                      >{product.retailPriceFormatted}</span
+                    >
+                  </div>
+                </template>
+                <template lwc:if={product.savingsFormatted}>
+                  <span class="ck-savings">{product.savingsFormatted}</span>
+                </template>
+              </div>
+
+              <button
+                class="ck-quote-btn"
+                data-product-id={product.productId}
+                onclick={handleOpenQuoteModal}
+                disabled={product.buttonDisabled}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
+                  />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="12" y1="18" x2="12" y2="12" />
+                  <line x1="9" y1="15" x2="15" y2="15" />
+                </svg>
+                Request Quote
+              </button>
+            </div>
+          </article>
+        </template>
+      </section>
+    </template>
+  </div>
+
+  <!-- ═══════════ QUOTE MODAL ═══════════ -->
+  <template lwc:if={showQuoteModal}>
+    <div class="ck-modal-overlay" onclick={handleCloseModal}>
+      <div class="ck-modal" onclick={stopPropagation}>
+        <button class="ck-modal-close" onclick={handleCloseModal}>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        <div class="ck-modal-header">
+          <div class="ck-modal-badge">Quick Quote</div>
+          <h2 class="ck-modal-title">Request a Quote</h2>
+          <p class="ck-modal-subtitle">
+            Our team will review and respond within 24h.
+          </p>
+        </div>
+
+        <!-- Product summary -->
+        <div class="ck-modal-product">
+          <img
+            src={selectedProduct.imageUrl}
+            alt={selectedProduct.name}
+            class="ck-modal-product-img"
+          />
+          <div class="ck-modal-product-info">
+            <span class="ck-modal-product-cat"
+              >{selectedProduct.categoryName}</span
+            >
+            <h3 class="ck-modal-product-name">{selectedProduct.name}</h3>
+            <div class="ck-modal-product-price">
+              <span class="ck-modal-price-label">B2B unit price:</span>
+              <span class="ck-modal-price-value">{modalProductPrice}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="ck-modal-form">
+          <div class="ck-modal-field">
+            <label class="ck-modal-label">Quantity</label>
+            <div class="ck-qty-wrap">
+              <button class="ck-qty-btn" onclick={decrementQuantity}>−</button>
+              <input
+                type="number"
+                class="ck-qty-input"
+                value={modalQuantity}
+                min="1"
+                onchange={handleQuantityChange}
+              />
+              <button class="ck-qty-btn" onclick={incrementQuantity}>+</button>
+            </div>
+          </div>
+
+          <div class="ck-modal-field">
+            <label class="ck-modal-label">Requested Delivery Date</label>
+            <input
+              type="date"
+              class="ck-modal-input"
+              value={modalDeliveryDate}
+              min={minDeliveryDate}
+              onchange={handleDeliveryDateChange}
+            />
+          </div>
+
+          <div class="ck-modal-field">
+            <label class="ck-modal-label">Special Notes (optional)</label>
+            <textarea
+              class="ck-modal-textarea"
+              placeholder="e.g. Need delivery in 2 phases, custom packaging, etc."
+              onchange={handleNotesChange}
+              rows="3"
+            ></textarea>
+          </div>
+
+          <!-- Urgent Request -->
+          <div class="ck-modal-field ck-modal-urgent-field">
+            <label class="ck-urgent-checkbox-label">
+              <input
+                type="checkbox"
+                checked={modalIsUrgent}
+                onchange={handleUrgentToggle}
+              />
+              <span>
+                <strong>🚨 Mark as URGENT</strong>
+                <small>Response within 24h</small>
+              </span>
+            </label>
+            <template lwc:if={showModalUrgencyReason}>
+              <textarea
+                class="ck-modal-textarea ck-urgent-reason-input"
+                placeholder="Reason for urgency..."
+                value={modalUrgencyReason}
+                onchange={handleUrgencyReasonChange}
+                rows="2"
+              ></textarea>
+            </template>
+          </div>
+
+          <div class="ck-modal-total">
+            <span class="ck-total-label">Estimated Total:</span>
+            <span class="ck-total-value">{modalTotal}</span>
+          </div>
+
+          <template lwc:if={submitError}>
+            <div class="ck-modal-error">{submitError}</div>
+          </template>
+        </div>
+
+        <!-- Actions -->
+        <div class="ck-modal-actions">
+          <button
+            class="ck-modal-btn-secondary"
+            onclick={handleCloseModal}
+            disabled={isSubmittingQuote}
+          >
+            Cancel
+          </button>
+          <button
+            class="ck-modal-btn-primary"
+            onclick={handleSubmitQuote}
+            disabled={isSubmittingQuote}
+          >
+            {submitButtonLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ═══════════ TOAST ═══════════ -->
+  <template lwc:if={showToast}>
+    <div class={toastClass}>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
+      </svg>
+      <span>{toastMessage}</span>
+    </div>
+  </template>
+</template>

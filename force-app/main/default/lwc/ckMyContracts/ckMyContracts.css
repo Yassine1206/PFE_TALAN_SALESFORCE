@@ -1,0 +1,385 @@
+/* ═══════════════════════════════════════════════════════════
+   DARK MODE OVERRIDES
+   ═══════════════════════════════════════════════════════════ */
+:host([data-theme="dark"]) {
+  background: #0a1628 !important;
+  color: #f1f3f5 !important;
+}
+
+:host([data-theme="dark"]) .ck-page-wrapper,
+:host([data-theme="dark"]) .ck-content-wrapper {
+  background: #0a1628 !important;
+}
+
+:host([data-theme="dark"]) h1,
+:host([data-theme="dark"]) h2,
+:host([data-theme="dark"]) h3 {
+  color: #f1f3f5 !important;
+}
+
+:host([data-theme="dark"]) .ck-card,
+:host([data-theme="dark"]) [class*="card"] {
+  background: #14253f !important;
+  border-color: #243b66 !important;
+  color: #f1f3f5 !important;
+}
+
+:host([data-theme="dark"]) p,
+:host([data-theme="dark"]) span,
+:host([data-theme="dark"]) td {
+  color: #c4cad4 !important;
+}
+
+:host([data-theme="dark"]) input,
+:host([data-theme="dark"]) select,
+:host([data-theme="dark"]) textarea {
+  background: #14253f !important;
+  color: #f1f3f5 !important;
+  border-color: #243b66 !important;
+}
+
+:host([data-theme="dark"]) table {
+  background: #14253f !important;
+}
+
+:host([data-theme="dark"]) th {
+  background: #1a2f50 !important;
+  color: #f1f3f5 !important;
+}
+
+:host([data-theme="dark"]) tr:hover {
+  background: #1a2f50 !important;
+}
+:host {
+  display: block;
+}
+
+.mc-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px 80px;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.mc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.mc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mc-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0a1628;
+  margin: 0;
+}
+.mc-btn-quotes {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #f1f3f5;
+  color: #495057;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.mc-btn-quotes:hover {
+  background: #e9ecef;
+  color: #0a1628;
+}
+
+/* Loading */
+.mc-loading {
+  text-align: center;
+  padding: 60px;
+  color: #868e96;
+}
+.mc-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f1f3f5;
+  border-top-color: #1d9e75;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error */
+.mc-error {
+  background: #fff5f5;
+  border: 1.5px solid #f5c6cb;
+  border-radius: 10px;
+  padding: 16px;
+  color: #e24b4a;
+}
+
+/* Empty */
+.mc-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: #868e96;
+}
+.mc-empty h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0a1628;
+  margin: 16px 0 8px;
+}
+.mc-empty p {
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+.mc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #1d9e75;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* List */
+.mc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card */
+.mc-card {
+  background: #fff;
+  border: 1.5px solid #e9ecef;
+  border-radius: 16px;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.mc-card:hover {
+  border-color: #1d9e75;
+  box-shadow: 0 4px 20px rgba(29, 158, 117, 0.1);
+}
+.mc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid #f1f3f5;
+}
+.mc-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mc-contract-number {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0a1628;
+}
+.mc-card-body {
+  padding: 16px 20px;
+}
+.mc-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.mc-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mc-info-label {
+  font-size: 11px;
+  color: #868e96;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.mc-info-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a1628;
+}
+.mc-amount {
+  color: #1d9e75;
+  font-size: 15px;
+}
+.mc-card-footer {
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-top: 1px solid #f1f3f5;
+}
+.mc-btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #e1f5ee;
+  border: 1.5px solid #a8e6cf;
+  color: #1d9e75;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.mc-btn-download:hover {
+  background: #1d9e75;
+  color: #fff;
+}
+
+/* Status */
+.mc-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.mc-status-active {
+  background: #e1f5ee;
+  color: #1d9e75;
+}
+.mc-status-draft {
+  background: #f1f3f5;
+  color: #868e96;
+}
+.mc-status-default {
+  background: #e8f4fd;
+  color: #1971c2;
+}
+/* ═══════════════════════════════════════════════════════════
+   SIGNATURE — Sign button + Signed badge
+   ═══════════════════════════════════════════════════════════ */
+
+/* Status wrapper for signed + active */
+.mc-status-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Signed badge */
+.mc-status-signed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b1a, #ff8c42);
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 107, 26, 0.3);
+}
+
+.mc-status-signed svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Signature info inline */
+.mc-signature-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 26, 0.06),
+    rgba(255, 107, 26, 0.02)
+  );
+  border-left: 3px solid #ff6b1a;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #495057;
+}
+
+.mc-signature-info svg {
+  width: 14px;
+  height: 14px;
+  color: #ff6b1a;
+  flex-shrink: 0;
+}
+
+.mc-signature-info strong {
+  color: #0a1628;
+  font-weight: 700;
+}
+
+/* Card footer with multiple buttons */
+.mc-card-footer {
+  display: flex;
+  gap: 10px;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-top: 1px solid #f1f3f5;
+}
+
+.mc-card-footer .mc-btn-download {
+  flex: 1;
+  width: auto;
+}
+
+/* Sign button */
+.mc-btn-sign {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #ff6b1a;
+  border: 1.5px solid #ff6b1a;
+  color: white;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255, 107, 26, 0.25);
+}
+
+.mc-btn-sign:hover {
+  background: #ff8c42;
+  border-color: #ff8c42;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 107, 26, 0.4);
+}
+
+.mc-btn-sign svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Dark mode for new elements */
+:host([data-theme="dark"]) .mc-signature-info {
+  background: rgba(255, 107, 26, 0.1) !important;
+  color: #c4cad4 !important;
+}
+
+:host([data-theme="dark"]) .mc-signature-info strong {
+  color: #f1f3f5 !important;
+}

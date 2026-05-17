@@ -42,5 +42,6 @@
   "eslint.options": {
     "overrideConfigFile": "d:\\formation salesforce\\projet_PFE_TALAN\\.eslintrc.json"
   },
-  "xml.preferences.showSchemaDocumentationType": "none"
+  "xml.preferences.showSchemaDocumentationType": "none",
+  "salesforce.einsteinForDevelopers.enableAutocompletions": true
 }

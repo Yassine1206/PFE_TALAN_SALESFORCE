@@ -31,7 +31,7 @@ public class CkUpdateUserEmailJob implements Queueable, Database.AllowsCallouts 
             
             HttpRequest req = new HttpRequest();
             req.setEndpoint(
-                'callout:Salesforce_Internal_API_2/services/data/v59.0/sobjects/User/'
+                'callout:Salesforce_Internal_API/services/data/v59.0/sobjects/User/'
                 + userId
                 );
             req.setMethod('PATCH');

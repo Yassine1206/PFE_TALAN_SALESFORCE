@@ -1,0 +1,1178 @@
+<template>
+  <!-- AJOUTE ce bloc skeleton AVANT showDashboard -->
+  <template lwc:if={isLoading}>
+    <div class="ck-dashboard">
+      <!-- Skeleton Hero -->
+      <div class="ck-skeleton ck-skeleton-hero"></div>
+
+      <!-- Skeleton Metrics -->
+      <div class="ck-skeleton-metrics">
+        <div class="ck-skeleton ck-skeleton-metric-card"></div>
+        <div class="ck-skeleton ck-skeleton-metric-card"></div>
+        <div class="ck-skeleton ck-skeleton-metric-card"></div>
+        <div class="ck-skeleton ck-skeleton-metric-card"></div>
+      </div>
+
+      <!-- Skeleton Charts -->
+      <div class="ck-skeleton-charts">
+        <div class="ck-skeleton ck-skeleton-chart-large"></div>
+        <div class="ck-skeleton ck-skeleton-chart-small"></div>
+      </div>
+
+      <!-- Skeleton additional sections -->
+      <div class="ck-skeleton ck-skeleton-section"></div>
+      <div class="ck-skeleton ck-skeleton-section"></div>
+    </div>
+  </template>
+
+  <!-- WRAP le contenu existant avec showDashboard -->
+  <template lwc:if={showDashboard}>
+    <!-- ... TOUT le contenu existant du dashboard ici ... -->
+  </template>
+  <!-- ═══════════ LOADING SKELETON ═══════════ -->
+  <template lwc:if={isLoading}>
+    <div class="ck-skeleton-container">
+      <div class="ck-skeleton-hero"></div>
+      <div class="ck-skeleton-metrics">
+        <div class="ck-skeleton-card"></div>
+        <div class="ck-skeleton-card"></div>
+        <div class="ck-skeleton-card"></div>
+        <div class="ck-skeleton-card"></div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ═══════════ ERROR STATE ═══════════ -->
+  <template lwc:if={error}>
+    <div class="ck-error">
+      <p>⚠️ Unable to load dashboard. Please refresh the page.</p>
+    </div>
+  </template>
+
+  <!-- ═══════════ MAIN DASHBOARD ═══════════ -->
+  <template lwc:if={data}>
+    <div class="ck-dashboard">
+      <!-- ─────── SECTION 1: HERO ─────── -->
+      <section class="ck-hero">
+        <div class="ck-hero-content">
+          <div class="ck-hero-badges">
+            <span class="ck-hero-badge ck-hero-badge-primary"
+              >B2B WORKSPACE</span
+            >
+            <span class="ck-hero-badge ck-hero-badge-muted"
+              >{currentDateFormatted}</span
+            >
+          </div>
+          <h1 class="ck-hero-greeting">
+            {greeting}, <span class="ck-hero-name">{firstName}</span>
+          </h1>
+          <p class="ck-hero-subtitle">
+            {accountName}
+            <template lwc:if={memberSinceFormatted}>
+              · Member since {memberSinceFormatted}
+            </template>
+          </p>
+          <div class="ck-hero-quickstats">
+            <span class="ck-hero-stat">{pendingQuotesText}</span>
+            <span class="ck-hero-divider">·</span>
+            <span class="ck-hero-stat">{activeContractsText}</span>
+            <span class="ck-hero-divider">·</span>
+            <span class="ck-hero-stat">{ytdSpendFormatted}</span>
+          </div>
+        </div>
+        <button class="ck-hero-cta" onclick={handleRequestQuote}>
+          <svg
+            class="ck-cta-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Request Quote
+        </button>
+      </section>
+
+      <!-- ─────── SECTION 2: HERO METRICS ─────── -->
+      <section class="ck-metrics-grid">
+        <template for:each={metrics} for:item="m">
+          <div key={m.key} class="ck-metric-card">
+            <div class="ck-metric-header">
+              <span class="ck-metric-label">{m.label}</span>
+              <span class={m.changeClass}>
+                {m.changeIcon} {m.formattedChange}
+              </span>
+            </div>
+            <div
+              class="ck-metric-value"
+              data-counter={m.value}
+              data-format={m.format}
+            >
+              {m.formattedValue}
+            </div>
+            <div class="ck-metric-previous">
+              vs {m.previousFormatted} last month
+            </div>
+            <div class="ck-metric-spark">
+              <svg viewBox="0 0 120 22" preserveAspectRatio="none">
+                <path
+                  d={m.sparkPath}
+                  stroke={m.color}
+                  stroke-width="1.5"
+                  fill="none"
+                />
+                <path d={m.sparkAreaPath} fill={m.color} fill-opacity="0.12" />
+              </svg>
+            </div>
+          </div>
+        </template>
+      </section>
+
+      <section class="ck-charts-section" lwc:if={showCharts}>
+        <!-- ═══════════ ROW 1: Revenue (2/3) + Donut (1/3) ═══════════ -->
+        <div class="ck-charts-row-top">
+          <!-- Revenue Trend Card -->
+          <div class="ck-chart-card ck-chart-revenue-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Revenue Trend</h3>
+                <p class="ck-chart-subtitle">Last 12 months</p>
+              </div>
+              <div class="ck-chart-header-right">
+                <span class="ck-chart-total-value"
+                  >{revenueTotalFormatted}</span
+                >
+                <span class="ck-chart-total-label">YTD TOTAL</span>
+              </div>
+            </div>
+            <div class="ck-chart-canvas-wrapper ck-chart-canvas-revenue">
+              <canvas class="ck-chart-canvas" data-chart="revenue"></canvas>
+            </div>
+          </div>
+
+          <!-- Donut Spending Card -->
+          <div class="ck-chart-card ck-chart-donut-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Spending by Category</h3>
+                <p class="ck-chart-subtitle">YTD breakdown</p>
+              </div>
+            </div>
+            <template lwc:if={hasSpendingData}>
+              <div class="ck-chart-canvas-wrapper ck-chart-canvas-donut">
+                <canvas class="ck-chart-canvas" data-chart="donut"></canvas>
+              </div>
+            </template>
+            <template lwc:else>
+              <div class="ck-chart-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <p>No spending data yet this year</p>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- ═══════════ ROW 2: Pipeline (full width) ═══════════ -->
+        <div class="ck-chart-card ck-chart-pipeline-card">
+          <div class="ck-chart-header">
+            <div class="ck-chart-header-left">
+              <h3 class="ck-chart-title">Quotes Pipeline</h3>
+              <p class="ck-chart-subtitle">
+                {pipelineTotal} total ·
+                <span class="ck-chart-conversion"
+                  >{pipelineConversion}% accepted</span
+                >
+              </p>
+            </div>
+            <div class="ck-chart-header-right">
+              <div class="ck-pipeline-legend">
+                <span class="ck-legend-item"
+                  ><span
+                    class="ck-legend-dot"
+                    style="background: #868e96"
+                  ></span
+                  >Draft</span
+                >
+                <span class="ck-legend-item"
+                  ><span
+                    class="ck-legend-dot"
+                    style="background: #1971c2"
+                  ></span
+                  >Sent</span
+                >
+                <span class="ck-legend-item"
+                  ><span
+                    class="ck-legend-dot"
+                    style="background: #1d9e75"
+                  ></span
+                  >Accepted</span
+                >
+                <span class="ck-legend-item"
+                  ><span
+                    class="ck-legend-dot"
+                    style="background: #e24b4a"
+                  ></span
+                  >Rejected</span
+                >
+                <span class="ck-legend-item"
+                  ><span
+                    class="ck-legend-dot"
+                    style="background: #ff6b1a"
+                  ></span
+                  >Expired</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="ck-chart-canvas-wrapper ck-chart-canvas-pipeline">
+            <canvas class="ck-chart-canvas" data-chart="pipeline"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="ck-advanced-section" lwc:if={showAdvanced}>
+        <!-- ═══════════ HEATMAP — Activity Heatmap (full width) ═══════════ -->
+
+        <div class="ck-chart-card ck-heatmap-card">
+          <div class="ck-chart-header">
+            <div class="ck-chart-header-left">
+              <h3 class="ck-chart-title">Activity Heatmap</h3>
+              <p class="ck-chart-subtitle">
+                {heatmapTotalActivity} activities over the past year · click a
+                day to see details
+              </p>
+            </div>
+            <div class="ck-chart-header-right">
+              <div class="ck-heatmap-legend">
+                <span class="ck-heat-legend-label">Less</span>
+                <span class="ck-heat-legend-cell ck-heat-level-0"></span>
+                <span class="ck-heat-legend-cell ck-heat-level-1"></span>
+                <span class="ck-heat-legend-cell ck-heat-level-2"></span>
+                <span class="ck-heat-legend-cell ck-heat-level-3"></span>
+                <span class="ck-heat-legend-cell ck-heat-level-4"></span>
+                <span class="ck-heat-legend-label">More</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Heatmap grid -->
+          <div class="ck-heatmap-wrapper" lwc:dom="manual"></div>
+
+          <!-- Contribution Activity Panel (slide-down) -->
+          <template lwc:if={selectedDay}>
+            <div class="ck-contrib-panel">
+              <div class="ck-contrib-header">
+                <div class="ck-contrib-header-left">
+                  <h4 class="ck-contrib-title">Contribution Activity</h4>
+                  <p class="ck-contrib-date">{selectedDayFormatted}</p>
+                </div>
+                <button
+                  class="ck-contrib-close"
+                  onclick={handleCloseContribPanel}
+                  title="Close"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <template lwc:if={selectedDayHasActivities}>
+                <div class="ck-contrib-list">
+                  <template for:each={selectedDayActivities} for:item="act">
+                    <a href={act.url} class={act.itemClass} key={act.id}>
+                      <div class={act.iconClass}>
+                        <template lwc:if={act.isQuote}>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path
+                              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                            />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                          </svg>
+                        </template>
+                        <template lwc:else>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path
+                              d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 1.99-1.79l1.54-8.89H6"
+                            />
+                          </svg>
+                        </template>
+                      </div>
+                      <div class="ck-contrib-content">
+                        <span class="ck-contrib-item-title">{act.title}</span>
+                        <span class="ck-contrib-item-meta">
+                          {act.displayAmount} ·
+                          <span class={act.statusClass}>{act.status}</span>
+                        </span>
+                      </div>
+                      <svg
+                        class="ck-contrib-arrow"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </a>
+                  </template>
+                </div>
+              </template>
+
+              <template lwc:else>
+                <div class="ck-contrib-empty">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                    <line x1="9" y1="9" x2="9.01" y2="9" />
+                    <line x1="15" y1="9" x2="15.01" y2="9" />
+                  </svg>
+                  <p>No activity on this day</p>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </section>
+
+      <section class="ck-section5-wrapper" lwc:if={showSection5}>
+        <!-- ═══════════ ROW 1: World Map (full width) ═══════════ -->
+        <div class="ck-chart-card ck-geomap-card">
+          <div class="ck-chart-header">
+            <div class="ck-chart-header-left">
+              <h3 class="ck-chart-title">Global Reach</h3>
+              <p class="ck-chart-subtitle">
+                TalFlow's worldwide network — your location highlighted
+              </p>
+            </div>
+            <div class="ck-chart-header-right">
+              <div class="ck-geo-stats-inline">
+                <div class="ck-geo-stat-pill">
+                  <span class="ck-geo-stat-value">{geoTotalB2B}</span>
+                  <span class="ck-geo-stat-label">B2B Customers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ck-geomap-content">
+            <div class="ck-geomap-svg-wrapper">
+              <lightning-map
+                map-markers={mapMarkers}
+                center={mapCenter}
+                zoom-level="2"
+                list-view="hidden"
+                markers-title="TalFlow Network"
+              >
+              </lightning-map>
+            </div>
+            <div class="ck-geomap-side">
+              <!-- Card 1: Your Location (primary, gradient) -->
+              <div class="ck-geo-card ck-geo-card-primary">
+                <div class="ck-geo-card-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+                    ></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="ck-geo-card-content">
+                  <span class="ck-geo-card-label">Your Location</span>
+                  <span class="ck-geo-card-value">{geoUserCity}</span>
+                  <span class="ck-geo-card-sub">{geoUserCountry}</span>
+                </div>
+              </div>
+
+              <!-- Card 2: B2B partners in same country -->
+              <div class="ck-geo-card">
+                <div class="ck-geo-card-icon ck-geo-icon-blue">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                    ></path>
+                  </svg>
+                </div>
+                <div class="ck-geo-card-content">
+                  <span class="ck-geo-card-label">In {geoUserCountry}</span>
+                  <span class="ck-geo-card-value">{geoSameCountry}</span>
+                  <span class="ck-geo-card-sub">B2B partners</span>
+                </div>
+              </div>
+
+              <!-- Card 3: B2B partners in same city -->
+              <div class="ck-geo-card">
+                <div class="ck-geo-card-icon ck-geo-icon-green">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                    ></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg>
+                </div>
+                <div class="ck-geo-card-content">
+                  <span class="ck-geo-card-label">In {geoUserCity}</span>
+                  <span class="ck-geo-card-value">{geoSameCity}</span>
+                  <span class="ck-geo-card-sub">Local businesses</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ ROW 2: Top 5 Products + Notifications ═══════════ -->
+        <div class="ck-section5-row">
+          <!-- Top 5 Products -->
+          <div class="ck-chart-card ck-top5-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Top 5 Products</h3>
+                <p class="ck-chart-subtitle">By spending YTD</p>
+              </div>
+            </div>
+            <template lwc:if={hasTopProducts}>
+              <div class="ck-top5-list">
+                <template for:each={topProducts} for:item="p">
+                  <div class="ck-top5-item" key={p.productId}>
+                    <div class="ck-top5-rank">{p.rank}</div>
+                    <div class="ck-top5-info">
+                      <span class="ck-top5-name">{p.name}</span>
+                      <span class="ck-top5-cat">{p.category}</span>
+                    </div>
+                    <div class="ck-top5-stats">
+                      <span class="ck-top5-spent">{p.displaySpent}</span>
+                      <span class="ck-top5-qty">{p.totalQty} units</span>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+            <template lwc:else>
+              <div class="ck-chart-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"
+                  ></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 01-8 0"></path>
+                </svg>
+                <p>No purchases yet this year</p>
+              </div>
+            </template>
+          </div>
+
+          <!-- Recent Notifications -->
+          <div class="ck-chart-card ck-notif-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Notifications</h3>
+                <p class="ck-chart-subtitle">{notifCount} pending actions</p>
+              </div>
+            </div>
+            <template lwc:if={hasNotifications}>
+              <div class="ck-notif-list">
+                <template for:each={notifications} for:item="n">
+                  <a href={n.actionUrl} class={n.cardClass} key={n.id}>
+                    <div
+                      class={n.iconClass}
+                      lwc:dom="manual"
+                      data-icon-type={n.iconType}
+                    ></div>
+                    <div class="ck-notif-content">
+                      <span class="ck-notif-title">{n.title}</span>
+                      <span class="ck-notif-subtitle">{n.subtitle}</span>
+                    </div>
+                    <span class="ck-notif-action"
+                      >{n.actionLabel}
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </span>
+                  </a>
+                </template>
+              </div>
+            </template>
+            <template lwc:else>
+              <div class="ck-chart-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <p>You're all caught up!</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <section class="ck-section6-wrapper" lwc:if={showSection6}>
+        <!-- ═══════════ ROW 1: Health Score HERO (full width) ═══════════ -->
+        <div class="ck-chart-card ck-health-card">
+          <div class="ck-chart-header">
+            <div class="ck-chart-header-left">
+              <h3 class="ck-chart-title">Account Health Score</h3>
+              <p class="ck-chart-subtitle">
+                Overall performance · {tierName} tier member
+              </p>
+            </div>
+            <div class="ck-chart-header-right">
+              <span class={healthRatingClass}>{healthRating}</span>
+            </div>
+          </div>
+
+          <div class="ck-health-content">
+            <!-- Gauge SVG (left side) -->
+            <div class="ck-health-gauge-wrapper">
+              <svg
+                class="ck-health-gauge"
+                viewBox="0 0 200 200"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <!-- Background circle -->
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="80"
+                  fill="none"
+                  stroke="#f1f3f5"
+                  stroke-width="14"
+                ></circle>
+                <!-- Progress arc (animated) -->
+                <circle
+                  cx="100"
+                  cy="100"
+                  r="80"
+                  fill="none"
+                  stroke={healthGaugeColor}
+                  stroke-width="14"
+                  stroke-linecap="round"
+                  stroke-dasharray={healthGaugeDashArray}
+                  transform="rotate(-90 100 100)"
+                  class="ck-health-gauge-progress"
+                ></circle>
+                <!-- Center text: score number -->
+                <text
+                  x="100"
+                  y="92"
+                  text-anchor="middle"
+                  class="ck-health-score-text"
+                  fill="#0A1628"
+                >
+                  {healthScore}
+                </text>
+                <text
+                  x="100"
+                  y="115"
+                  text-anchor="middle"
+                  class="ck-health-score-max"
+                  fill="#868E96"
+                >
+                  / 100
+                </text>
+              </svg>
+            </div>
+
+            <!-- Breakdown (right side) -->
+            <div class="ck-health-breakdown">
+              <h4 class="ck-health-breakdown-title">Score Breakdown</h4>
+              <template for:each={healthBreakdown} for:item="item">
+                <div
+                  class="ck-health-item"
+                  key={item.label}
+                  data-health-label={item.label}
+                >
+                  <div class="ck-health-item-header">
+                    <span class="ck-health-item-label">{item.label}</span>
+                    <span class="ck-health-item-score"
+                      >{item.score} / {item.max}</span
+                    >
+                  </div>
+                  <div class="ck-health-item-bar">
+                    <div
+                      class="ck-health-item-bar-fill"
+                      data-percent={item.percent}
+                      data-color={item.color}
+                    ></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ ROW 2: 3 cards (Savings / Forecast / Insights) ═══════════ -->
+        <div class="ck-section6-row">
+          <!-- Cost Savings Card -->
+          <div class="ck-chart-card ck-savings-card">
+            <div class="ck-savings-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path
+                  d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                ></path>
+              </svg>
+            </div>
+            <div class="ck-savings-content">
+              <span class="ck-savings-label">Cost Savings YTD</span>
+              <span class="ck-savings-amount">{costSavingsTotal}</span>
+              <span class="ck-savings-meta">
+                <span class="ck-savings-pct">{costSavingsPct}% off retail</span>
+                · {costSavingsUnits} units
+              </span>
+            </div>
+          </div>
+
+          <!-- Forecast Card -->
+          <div class="ck-chart-card ck-forecast-card">
+            <div class="ck-forecast-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <div class="ck-forecast-content">
+              <span class="ck-forecast-label">Forecast Next Month</span>
+              <span class="ck-forecast-amount">{forecastNextMonth}</span>
+              <span class="ck-forecast-meta">
+                Q3 projection: <strong>{forecastQ3}</strong>
+                · {forecastConfidence} confidence
+              </span>
+            </div>
+          </div>
+
+          <!-- AI Insights Card -->
+          <div class="ck-chart-card ck-insights-card">
+            <div class="ck-insights-header">
+              <div class="ck-insights-title-row">
+                <svg
+                  class="ck-insights-bot-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <path d="M12 7v4"></path>
+                  <line x1="8" y1="16" x2="8" y2="16"></line>
+                  <line x1="16" y1="16" x2="16" y2="16"></line>
+                </svg>
+                <span class="ck-insights-title">Smart Insights</span>
+                <template lwc:if={isAiPowered}>
+                  <span class="ck-ai-badge">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polygon
+                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                      ></polygon>
+                    </svg>
+                    AI-POWERED
+                  </span>
+                </template>
+              </div>
+              <span class="ck-insights-count">{insightsCount}</span>
+            </div>
+
+            <!-- AJOUTE ce loading state juste APRÈS le header et AVANT <template lwc:if={hasInsights}> : -->
+            <template lwc:if={insightsLoading}>
+              <div class="ck-insights-loading">
+                <div class="ck-ai-spinner"></div>
+                <p>Generating AI insights...</p>
+              </div>
+            </template>
+
+            <!-- WRAP le contenu actuel hasInsights/empty avec une condition supplémentaire : -->
+            <template lwc:if={insightsReady}>
+              <template lwc:if={hasInsights}>
+                <!-- ... contenu existant de la liste d'insights ... -->
+              </template>
+              <template lwc:else>
+                <!-- ... empty state existant ... -->
+              </template>
+            </template>
+
+            <template lwc:if={hasInsights}>
+              <div class="ck-insights-list">
+                <template for:each={aiInsights} for:item="ins">
+                  <div class={ins.cardClass} key={ins.title}>
+                    <div class={ins.iconClass}>
+                      <template lwc:if={ins.isTrophy}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                          <path d="M4 22h16"></path>
+                          <path
+                            d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+                          ></path>
+                          <path
+                            d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+                          ></path>
+                          <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                        </svg>
+                      </template>
+                      <template lwc:elseif={ins.isAlert}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="8" x2="12" y2="12"></line>
+                          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                      </template>
+                      <template lwc:else>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline
+                            points="23 6 13.5 15.5 8.5 10.5 1 18"
+                          ></polyline>
+                          <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                      </template>
+                    </div>
+                    <div class="ck-insight-content">
+                      <span class="ck-insight-title">{ins.title}</span>
+                      <span class="ck-insight-text">{ins.text}</span>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+
+            <template lwc:else>
+              <div class="ck-insights-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <p>No insights yet — keep ordering!</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+
+      <section class="ck-section7-wrapper" lwc:if={showSection7}>
+        <!-- ═══════════ ROW 1: Tier System (full width) ═══════════ -->
+        <div class="ck-chart-card ck-tier-card">
+          <div class="ck-tier-content">
+            <!-- Left: Tier badge + name -->
+            <div class={tierBadgeClass}>
+              <svg
+                class="ck-tier-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                <path d="M4 22h16"></path>
+                <path
+                  d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"
+                ></path>
+                <path
+                  d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"
+                ></path>
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+              </svg>
+              <span class="ck-tier-name">{tierCurrentName}</span>
+              <span class="ck-tier-status">CURRENT TIER</span>
+            </div>
+
+            <!-- Middle: Progress to next tier -->
+            <div class="ck-tier-progress">
+              <template lwc:if={tierHasNext}>
+                <div class="ck-tier-progress-header">
+                  <span class="ck-tier-progress-label"
+                    >Progress to {tierNextName}</span
+                  >
+                  <span class="ck-tier-progress-value"
+                    >{tierProgressDisplay}</span
+                  >
+                </div>
+                <div class="ck-tier-progress-bar">
+                  <div
+                    class="ck-tier-progress-fill"
+                    data-progress={tierProgressPercent}
+                  ></div>
+                </div>
+                <p class="ck-tier-progress-hint">
+                  <strong>{tierToNextDisplay}</strong> more to reach
+                  {tierNextName} tier
+                </p>
+              </template>
+              <template lwc:else>
+                <div class="ck-tier-max">
+                  <span class="ck-tier-max-icon">⭐</span>
+                  <span class="ck-tier-max-text"
+                    >You've reached the highest tier!</span
+                  >
+                </div>
+              </template>
+            </div>
+
+            <!-- Right: Benefits list -->
+            <div class="ck-tier-benefits">
+              <h4 class="ck-tier-benefits-title">Your Benefits</h4>
+              <ul class="ck-tier-benefits-list">
+                <template for:each={tierBenefits} for:item="benefit">
+                  <li class="ck-tier-benefit-item" key={benefit}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>{benefit}</span>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ ROW 2: Recommended + Upcoming (50/50) ═══════════ -->
+        <div class="ck-section7-row">
+          <!-- Recommended Products (AI) -->
+          <div class="ck-chart-card ck-recommend-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Recommended for You</h3>
+                <p class="ck-chart-subtitle">Personalized product picks</p>
+              </div>
+              <div class="ck-chart-header-right">
+                <template lwc:if={isRecommendationsAiPowered}>
+                  <span class="ck-ai-badge">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polygon
+                        points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                      ></polygon>
+                    </svg>
+                    AI-POWERED
+                  </span>
+                </template>
+              </div>
+            </div>
+            <template lwc:if={hasRecommendations}>
+              <div class="ck-recommend-grid">
+                <template for:each={recommendedProducts} for:item="prod">
+                  <a
+                    href={prod.productUrl}
+                    class="ck-recommend-item"
+                    key={prod.productId}
+                  >
+                    <div class="ck-recommend-image">
+                      <template lwc:if={prod.imageUrl}>
+                        <img src={prod.imageUrl} alt={prod.name} />
+                      </template>
+                      <template lwc:else>
+                        <div class="ck-recommend-noimg">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <rect
+                              x="3"
+                              y="3"
+                              width="18"
+                              height="18"
+                              rx="2"
+                              ry="2"
+                            ></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                          </svg>
+                        </div>
+                      </template>
+                    </div>
+                    <div class="ck-recommend-info">
+                      <span class="ck-recommend-cat">{prod.category}</span>
+                      <span class="ck-recommend-name">{prod.name}</span>
+                      <span class="ck-recommend-price"
+                        >{prod.priceDisplay}</span
+                      >
+                      <p class="ck-recommend-reason">
+                        <span class="ck-recommend-reason-icon">💡</span>
+                        {prod.reason}
+                      </p>
+                    </div>
+                  </a>
+                </template>
+              </div>
+            </template>
+            <template lwc:else>
+              <div class="ck-chart-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+                  ></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <p>No recommendations available</p>
+              </div>
+            </template>
+          </div>
+
+          <!-- Upcoming Events -->
+          <div class="ck-chart-card ck-upcoming-card">
+            <div class="ck-chart-header">
+              <div class="ck-chart-header-left">
+                <h3 class="ck-chart-title">Upcoming Events</h3>
+                <p class="ck-chart-subtitle">
+                  {upcomingCount} events in next 30 days
+                </p>
+              </div>
+            </div>
+            <template lwc:if={hasUpcoming}>
+              <div class="ck-upcoming-list">
+                <template for:each={upcomingEvents} for:item="evt">
+                  <a href={evt.url} class={evt.itemClass} key={evt.title}>
+                    <div class={evt.iconClass}>
+                      <template lwc:if={evt.isContract}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M9 11l3 3L22 4"></path>
+                          <path
+                            d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                          ></path>
+                        </svg>
+                      </template>
+                      <template lwc:elseif={evt.isQuote}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path
+                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                          ></path>
+                          <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                      </template>
+                      <template lwc:else>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path
+                            d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 1.99-1.79l1.54-8.89H6"
+                          ></path>
+                        </svg>
+                      </template>
+                    </div>
+                    <div class="ck-upcoming-content">
+                      <span class="ck-upcoming-title">{evt.title}</span>
+                      <span class="ck-upcoming-subtitle">{evt.subtitle}</span>
+                    </div>
+                    <span class="ck-upcoming-date">{evt.dateDisplay}</span>
+                  </a>
+                </template>
+              </div>
+            </template>
+            <template lwc:else>
+              <div class="ck-chart-empty">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <p>No upcoming events in the next 30 days</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+</template>

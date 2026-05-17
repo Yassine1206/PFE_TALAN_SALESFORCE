@@ -1,0 +1,525 @@
+<template>
+  <div class="orders-wrapper">
+    <!-- Header -->
+    <div class="orders-header">
+      <div class="header-left">
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FF6B1A"
+          stroke-width="2"
+        >
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path
+            d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+          ></path>
+        </svg>
+        <div>
+          <h1 class="orders-title">My Orders</h1>
+          <p class="orders-subtitle">Track and manage all your B2B orders</p>
+        </div>
+      </div>
+      <a href="/TalFlowExpress/s/b2b-catalog" class="btn-new-order">
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        New Order
+      </a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-orange">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path
+              d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+            ></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.totalOrders}</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-green">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.totalSpentFormatted}</div>
+          <div class="stat-label">Total Spent</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-amber">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.pendingCount}</div>
+          <div class="stat-label">Pending</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon stat-icon-blue">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-value">{stats.deliveredCount}</div>
+          <div class="stat-label">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar: Filters + Search -->
+    <div class="toolbar">
+      <div class="filters">
+        <button
+          class={filterAllClass}
+          data-filter="all"
+          onclick={handleFilterClick}
+        >
+          All
+        </button>
+        <button
+          class={filterPendingClass}
+          data-filter="pending"
+          onclick={handleFilterClick}
+        >
+          Pending
+        </button>
+        <button
+          class={filterShippedClass}
+          data-filter="shipped"
+          onclick={handleFilterClick}
+        >
+          Shipped
+        </button>
+        <button
+          class={filterDeliveredClass}
+          data-filter="delivered"
+          onclick={handleFilterClick}
+        >
+          Delivered
+        </button>
+        <button
+          class={filterCancelledClass}
+          data-filter="cancelled"
+          onclick={handleFilterClick}
+        >
+          Cancelled
+        </button>
+      </div>
+
+      <div class="search-box">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search by order number..."
+          value={searchTerm}
+          oninput={handleSearchChange}
+        />
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <template if:true={isLoading}>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your orders...</p>
+      </div>
+    </template>
+
+    <!-- Error -->
+    <template if:true={errorMessage}>
+      <div class="error-state">{errorMessage}</div>
+    </template>
+
+    <!-- Empty -->
+    <template if:true={isEmpty}>
+      <div class="empty-state">
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#CED4DA"
+          stroke-width="1.5"
+        >
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path
+            d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"
+          ></path>
+        </svg>
+        <h3>No orders found</h3>
+        <p>Browse our catalog to place your first order</p>
+        <a href="/TalFlowExpress/s/b2b-catalog" class="btn-primary"
+          >Browse Catalog</a
+        >
+      </div>
+    </template>
+
+    <!-- Orders Table -->
+    <template if:true={hasOrders}>
+      <div class="results-count">{filteredCount} orders found</div>
+
+      <div class="orders-table">
+        <div class="table-header">
+          <div class="col-order">Order #</div>
+          <div class="col-date">Date</div>
+          <div class="col-items">Items</div>
+          <div class="col-amount">Amount</div>
+          <div class="col-status">Status</div>
+          <div class="col-actions">Actions</div>
+        </div>
+
+        <template for:each={filteredOrders} for:item="order">
+          <div
+            key={order.orderId}
+            class="table-row"
+            data-id={order.orderId}
+            onclick={handleRowClick}
+          >
+            <div class="col-order">
+              <strong>#{order.orderNumber}</strong>
+            </div>
+            <div class="col-date">{order.effectiveDate}</div>
+            <div class="col-items">{order.itemsLabel}</div>
+            <div class="col-amount">{order.totalAmountFormatted}</div>
+            <div class="col-status">
+              <span class={order.statusClass}>{order.status}</span>
+            </div>
+            <div class="col-actions">
+              <button class="btn-view">View Details</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- Detail Modal -->
+    <template if:true={isDetailOpen}>
+      <div class="modal-backdrop" onclick={handleCloseDetail}></div>
+      <div class="modal">
+        <template if:true={isLoadingDetail}>
+          <div class="loading-state">
+            <div class="spinner"></div>
+          </div>
+        </template>
+
+        <template if:false={isLoadingDetail}>
+          <template if:true={selectedOrder}>
+            <div class="modal-header">
+              <div>
+                <h2>Order #{selectedOrder.orderNumber}</h2>
+                <p>{selectedOrder.effectiveDate}</p>
+              </div>
+              <button class="modal-close" onclick={handleCloseDetail}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <!-- Order Info -->
+              <div class="detail-section">
+                <h3 class="section-title">Order Information</h3>
+                <div class="detail-row">
+                  <span class="detail-label">Status</span>
+                  <span class="detail-value">{selectedOrder.status}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Order Date</span>
+                  <span class="detail-value"
+                    >{selectedOrder.effectiveDate}</span
+                  >
+                </div>
+                <template if:true={selectedOrder.paymentMethod}>
+                  <div class="detail-row">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value"
+                      >{selectedOrder.paymentMethod}</span
+                    >
+                  </div>
+                </template>
+                <template if:true={selectedOrder.promoCode}>
+                  <div class="detail-row">
+                    <span class="detail-label">Promo Code</span>
+                    <span class="detail-value">{selectedOrder.promoCode}</span>
+                  </div>
+                </template>
+              </div>
+
+              <!-- Shipping -->
+              <template if:true={selectedOrder.shippingAddress}>
+                <div class="detail-section">
+                  <h3 class="section-title">Shipping Address</h3>
+                  <div class="shipping-info">
+                    <p>{selectedOrder.shippingAddress}</p>
+                    <p>
+                      {selectedOrder.shippingCity}, {selectedOrder.shippingZip}
+                    </p>
+                    <p>{selectedOrder.shippingCountry}</p>
+                    <template if:true={selectedOrder.phone}>
+                      <p class="contact">📞 {selectedOrder.phone}</p>
+                    </template>
+                    <template if:true={selectedOrder.email}>
+                      <p class="contact">✉️ {selectedOrder.email}</p>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Items -->
+              <div class="detail-section">
+                <h3 class="section-title">
+                  Order Items ({selectedOrder.items.length})
+                </h3>
+                <template for:each={selectedOrder.items} for:item="item">
+                  <div key={item.itemId} class="item-row">
+                    <div class="item-info">
+                      <div class="item-name">{item.name}</div>
+                      <div class="item-meta">
+                        {item.quantity} × {item.unitPriceFormatted}
+                      </div>
+                    </div>
+                    <div class="item-total">{item.totalPriceFormatted}</div>
+                  </div>
+                </template>
+              </div>
+
+              <!-- Totals breakdown -->
+              <div class="detail-section totals-section">
+                <h3 class="section-title">Price Breakdown</h3>
+                <div class="totals-row">
+                  <span>Subtotal</span>
+                  <span>{selectedOrder.subtotalFormatted}</span>
+                </div>
+                <template if:true={selectedOrder.discount}>
+                  <div class="totals-row discount">
+                    <span>Discount</span>
+                    <span>-{selectedOrder.discount}</span>
+                  </div>
+                </template>
+                <div class="totals-row">
+                  <span>Shipping</span>
+                  <span>{selectedOrder.shippingCostFormatted}</span>
+                </div>
+                <div class="totals-row">
+                  <span>Tax</span>
+                  <span>{selectedOrder.taxAmountFormatted}</span>
+                </div>
+                <div class="totals-row grand-total">
+                  <span>Total</span>
+                  <span>{selectedOrder.totalAmountFormatted}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn-secondary" onclick={handleCloseDetail}>
+                Close
+              </button>
+              <template if:true={selectedOrder.canPay}>
+                <button class="btn-primary-pay" onclick={handlePayNow}>
+                  Pay Now
+                </button>
+              </template>
+              <template if:false={selectedOrder.canPay}>
+                <button class="btn-primary" onclick={handleReorder}>
+                  Reorder
+                </button>
+              </template>
+            </div>
+          </template>
+        </template>
+      </div>
+    </template>
+
+    <!-- Payment Choice Modal -->
+    <template if:true={isPaymentChoiceOpen}>
+      <div class="modal-backdrop" onclick={closePaymentChoice}></div>
+      <div class="payment-modal">
+        <div class="modal-header">
+          <div>
+            <h2>Choose Payment Method</h2>
+            <p>
+              Order #{selectedOrder.orderNumber} —
+              {selectedOrder.totalAmountFormatted}
+            </p>
+          </div>
+          <button class="modal-close" onclick={closePaymentChoice}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p class="payment-intro">
+            Select how you'd like to pay for this order:
+          </p>
+
+          <!-- Card option -->
+          <button
+            class="payment-option"
+            onclick={handlePayByCard}
+            disabled={isProcessingPayment}
+          >
+            <div class="payment-icon icon-card">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+            </div>
+            <div class="payment-info">
+              <div class="payment-title">{cardButtonLabel}</div>
+              <div class="payment-desc">Secure payment via Stripe</div>
+            </div>
+            <template if:true={isCardProcessing}>
+              <div class="payment-spinner"></div>
+            </template>
+            <template if:false={isCardProcessing}>
+              <svg
+                class="arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </template>
+          </button>
+
+          <!-- COD option -->
+          <button
+            class="payment-option"
+            onclick={handlePayByCOD}
+            disabled={isProcessingPayment}
+          >
+            <div class="payment-icon icon-cod">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <div class="payment-info">
+              <div class="payment-title">{codButtonLabel}</div>
+              <div class="payment-desc">
+                Pay cash when you receive your order
+              </div>
+            </div>
+            <template if:true={isCODProcessing}>
+              <div class="payment-spinner"></div>
+            </template>
+            <template if:false={isCODProcessing}>
+              <svg
+                class="arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </template>
+          </button>
+
+          <div class="payment-notice">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span
+              >Your payment is secure and encrypted. We never store your card
+              details.</span
+            >
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</template>

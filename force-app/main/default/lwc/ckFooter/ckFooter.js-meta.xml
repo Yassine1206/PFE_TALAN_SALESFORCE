@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>62.0</apiVersion><isExposed>true</isExposed><masterLabel>CK Footer</masterLabel>
-    <targets><target>lightningCommunity__Page</target><target>lightningCommunity__Default</target></targets>
-    <targetConfigs><targetConfig targets="lightningCommunity__Default">
-        <property name="logoUrl" type="String" default="/sfsites/c/resource/ckLogo" label="Logo URL" />
-    </targetConfig></targetConfigs>
+    <apiVersion>62.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>TalFlow Footer</masterLabel>
+    <description
+  >Footer dynamique avec brand CMT, liens via Custom Object et newsletter</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
 </LightningComponentBundle>

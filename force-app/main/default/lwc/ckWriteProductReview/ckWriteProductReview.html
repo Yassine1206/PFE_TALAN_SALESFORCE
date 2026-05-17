@@ -1,0 +1,125 @@
+<template>
+  <div class="wpr-overlay" onclick={handleOverlayClick}>
+    <div class="wpr-modal" onclick={stopPropagation}>
+      <!-- Close button -->
+      <button class="wpr-close" onclick={handleClose}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <!-- Header -->
+      <div class="wpr-header">
+        <div class="wpr-badge">Share Your Experience</div>
+        <h2 class="wpr-title">Write a Review</h2>
+        <p class="wpr-subtitle">
+          Help other customers by sharing your honest opinion about
+          <strong>{productName}</strong>
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div class="wpr-form">
+        <!-- Rating -->
+        <div class="wpr-field">
+          <label class="wpr-label">Your Rating *</label>
+          <div class="wpr-stars" onmouseleave={handleStarLeave}>
+            <template for:each={starsToRender} for:item="star">
+              <button
+                key={star.id}
+                class={star.cssClass}
+                data-value={star.value}
+                onclick={handleStarClick}
+                onmouseenter={handleStarHover}
+              >
+                ★
+              </button>
+            </template>
+          </div>
+          <p class="wpr-rating-text">{ratingText}</p>
+        </div>
+
+        <!-- Title -->
+        <div class="wpr-field">
+          <label class="wpr-label">Review Title *</label>
+          <input
+            type="text"
+            class="wpr-input"
+            placeholder="Summarize your experience in one line"
+            value={title}
+            oninput={handleTitleChange}
+            maxlength="80"
+          />
+          <span class="wpr-char-count">{titleCharCount}</span>
+        </div>
+
+        <!-- Comment -->
+        <div class="wpr-field">
+          <label class="wpr-label">Your Review *</label>
+          <textarea
+            class="wpr-textarea"
+            placeholder="Tell us about your experience. What did you like? What could be better?"
+            value={comment}
+            oninput={handleCommentChange}
+            maxlength="2000"
+            rows="5"
+          ></textarea>
+          <span class="wpr-char-count">{commentCharCount}</span>
+        </div>
+
+        <!-- Recommend -->
+        <div class="wpr-field">
+          <label class="wpr-label">Would you recommend this product? *</label>
+          <div class="wpr-rec-buttons">
+            <button class={recommendYesClass} onclick={handleRecommendYes}>
+              <span class="wpr-rec-icon">💚</span>
+              <span>Yes, I recommend it</span>
+            </button>
+            <button class={recommendNoClass} onclick={handleRecommendNo}>
+              <span class="wpr-rec-icon">👎</span>
+              <span>No, I don't recommend</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <template lwc:if={errorMessage}>
+          <div class="wpr-error">{errorMessage}</div>
+        </template>
+
+        <!-- Info -->
+        <div class="wpr-info">
+          <span class="wpr-info-icon">ℹ️</span>
+          <span
+            >Your review will be checked by our team before being
+            published.</span
+          >
+        </div>
+
+        <!-- Actions -->
+        <div class="wpr-actions">
+          <button
+            class="wpr-btn-cancel"
+            onclick={handleClose}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </button>
+          <button
+            class={submitBtnClass}
+            onclick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            {submitButtonLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
